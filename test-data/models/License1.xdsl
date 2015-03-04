@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<smile version="1.0" id="License" numsamples="1000" discsamples="10000">
+	<properties>
+		<property id="Type">INDICATOR</property>
+	</properties>
+	<nodes>
+		<cpt id="Unique_Lic">
+			<state id="s1_below_3" />
+			<state id="s2_3_to_6" />
+			<state id="s3_6_to_10" />
+			<state id="s4_10_to_60" />
+			<state id="s5_60_up" />
+			<probabilities>0.1185185185185185 0.04444444444444444 0.1555555555555556 0.6740740740740741 0.007407407407407408</probabilities>
+			<property id="Type">INPUT</property>
+		</cpt>
+		<cpt id="Ratio_No_Lic">
+			<state id="s1_below_5" />
+			<state id="s2_5_to_30" />
+			<state id="s3_30_to_60" />
+			<state id="s4_60_to_80" />
+			<state id="s5_80_up" />
+			<probabilities>0.04444444444444444 0.1925925925925926 0.4888888888888888 0.1185185185185185 0.1555555555555556</probabilities>
+			<property id="Type">INPUT</property>
+		</cpt>
+		<cpt id="omm_Licenses">
+			<state id="s1_eq_0" />
+			<state id="s2_1_to_3" />
+			<state id="s3_3_to_5" />
+			<state id="s4_eq_5" />
+			<state id="s5_6_up" />
+			<probabilities>0.0814814814814815 0.3037037037037037 0.3407407407407407 0.1555555555555556 0.1185185185185185</probabilities>
+			<property id="Type">INPUT</property>
+		</cpt>
+		<cpt id="License">
+			<state id="low_2" />
+			<state id="medium_3" />
+			<state id="high_4" />
+			<state id="very_high_5" />
+			<parents>Unique_Lic Ratio_No_Lic omm_Licenses</parents>
+			<probabilities>0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.625 0.125 0.125 0.125 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.625 0.125 0.125 0.125 0.625 0.125 0.125 0.125 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.125 0.625 0.125 0.125 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.08333333333333333 0.75 0.08333333333333333 0.08333333333333333 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.625 0.125 0.125 0.125 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.125 0.625 0.125 0.125 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.125 0.625 0.125 0.125 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.125 0.625 0.125 0.125 0.04166666666666666 0.875 0.04166666666666666 0.04166666666666666 0.0625 0.8125 0.0625 0.0625 0.125 0.125 0.625 0.125 0.125 0.125 0.625 0.125 0.25 0.25 0.25 0.25 0.125 0.625 0.125 0.125 0.125 0.125 0.625 0.125 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.125 0.125 0.625 0.125 0.25 0.25 0.25 0.25 0.08333333333333333 0.08333333333333333 0.75 0.08333333333333333 0.125 0.125 0.125 0.625 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25 0.25</probabilities>
+			<property id="Type">INDICATOR</property>
+		</cpt>
+	</nodes>
+	<cases>
+		<case name="Caleb1">
+			<evidence node="Unique_Lic" state="s2_3_to_6" />
+			<evidence node="Ratio_No_Lic" state="s5_80_up" />
+			<evidence node="omm_Licenses" state="s3_3_to_5" />
+		</case>
+		<case name="Caleb2">
+			<evidence node="Unique_Lic" state="s1_below_3" />
+			<evidence node="Ratio_No_Lic" state="s5_80_up" />
+			<evidence node="omm_Licenses" state="s3_3_to_5" />
+		</case>
+		<case name="rbj1">
+			<description>p(e)=0.003</description>
+			<evidence node="Unique_Lic" state="s4_10_to_60" />
+			<evidence node="Ratio_No_Lic" state="s1_below_5" />
+			<evidence node="omm_Licenses" state="s5_6_up" />
+		</case>
+		<case name="rbj2">
+			<evidence node="Ratio_No_Lic" state="s5_80_up" />
+			<evidence node="Unique_Lic" state="s5_60_up" />
+			<evidence node="omm_Licenses" state="s1_eq_0" />
+		</case>
+		<case name="rbj3">
+			<description>Highest values per node p(e)=0.11</description>
+			<evidence node="Ratio_No_Lic" state="s3_30_to_60" />
+			<evidence node="Unique_Lic" state="s4_10_to_60" />
+			<evidence node="omm_Licenses" state="s3_3_to_5" />
+		</case>
+		<case name="rbj4">
+			<description>2nd highest values per node p(e)=0.009</description>
+			<evidence node="Ratio_No_Lic" state="s2_5_to_30" />
+			<evidence node="Unique_Lic" state="s3_6_to_10" />
+			<evidence node="omm_Licenses" state="s2_1_to_3" />
+		</case>
+		<case name="rbj5">
+			<description>p(e)=0.02</description>
+			<evidence node="Ratio_No_Lic" state="s3_30_to_60" />
+			<evidence node="Unique_Lic" state="s4_10_to_60" />
+			<evidence node="omm_Licenses" state="s1_eq_0" />
+		</case>
+	</cases>
+	<extensions>
+		<genie version="1.0" app="GeNIe 2.0.5219.0" name="License" faultnameformat="nodestate">
+			<node id="Unique_Lic">
+				<name>Unique_Lic</name>
+				<interior color="e5f6f7" />
+				<outline color="000080" />
+				<font color="000000" name="Arial" size="8" />
+				<position>503 56 575 104</position>
+				<barchart active="true" width="165" height="108" />
+			</node>
+			<node id="Ratio_No_Lic">
+				<name>Ratio_No_Lic</name>
+				<interior color="e5f6f7" />
+				<outline color="000080" />
+				<font color="000000" name="Arial" size="8" />
+				<position>45 92 117 140</position>
+				<barchart active="true" width="128" height="108" />
+			</node>
+			<node id="omm_Licenses">
+				<name>omm_Licenses</name>
+				<interior color="e5f6f7" />
+				<outline color="000080" />
+				<font color="000000" name="Arial" size="8" />
+				<position>113 237 185 285</position>
+				<barchart active="true" width="128" height="108" />
+			</node>
+			<node id="License">
+				<name>License</name>
+				<interior color="e5f6f7" />
+				<outline color="000080" />
+				<font color="000000" name="Arial" size="8" />
+				<position>264 85 336 133</position>
+				<barchart active="true" width="128" height="90" />
+			</node>
+		</genie>
+	</extensions>
+</smile>

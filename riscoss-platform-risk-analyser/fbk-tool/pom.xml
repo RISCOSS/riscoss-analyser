@@ -1,0 +1,48 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>eu.riscoss</groupId>
+    <artifactId>riscoss-platform-risk-analyser</artifactId>
+    <version>0.24-SNAPSHOT</version>
+  </parent>
+	<artifactId>riscoss-fbk</artifactId>
+	<name>RISCOSS-FBK</name>
+	<description>FBK risk analysis tool.</description>
+	<inceptionYear>2014</inceptionYear>
+
+	<developers>
+		<developer>
+			<name>Alberto Siena</name>
+			<email>siena@(nospam)fbk_DOT_eu</email>
+		</developer>
+	</developers>
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>2.3.2</version>
+				<configuration>
+					<source>1.7</source>
+					<target>1.7</target>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+	
+	<dependencies>
+		<dependency>
+			<groupId>eu.riscoss</groupId>
+			<artifactId>riscoss-api</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+
+    <dependency>
+	    <groupId>org.apache.velocity</groupId>
+	    <artifactId>velocity</artifactId>
+	    <version>1.7</version>
+    </dependency>
+
+	</dependencies>
+</project>

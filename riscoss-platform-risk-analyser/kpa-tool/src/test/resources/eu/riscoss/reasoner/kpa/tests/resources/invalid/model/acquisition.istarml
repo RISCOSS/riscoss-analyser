@@ -1,0 +1,65 @@
+<?xml version='1.0'?>
+<istarml version='1.0'>
+    <diagram name='OSS Acquisition'>
+        <actor id='COMM' name='OSS Community'>
+            <boundary>
+                <ielement id='OSS-D' name='Develop OSS Component' type='task'>
+                    <ielementLink type='decomposition'>
+						<ielement id='TST' name='Act-TEST' type='task'/>
+						<ielement id='DEV' name='Act-DEV' type='task'/>
+						<ielement id='MNT-C' name='Act-MAINT-Comp' type='task'/>
+						<ielement id='RLS' name='Act-RELEASE' type='task'/>
+                    </ielementLink>
+                </ielement>
+                <ielement id='CM' name='Community Managed' type='goal'>
+                    <ielementLink type='means-end'>
+						<ielement id='DCD-R' name='Act-DECIDE-Roadmap' type='task'/>
+						<ielement id='DCD-A' name='Act-DECIDE-ACC' type='task'/>
+                    </ielementLink>
+                </ielement>
+                <ielement id='SA' name='Supporting Activities Held' type='goal'/>
+            </boundary>
+        </actor>
+        <actor id='CMP' name='The Company'>
+            <boundary>
+                <ielement id='OSS-ACQ' name='Acquire OSS Component' type='task'>
+                    <ielementLink type='decomposition'>
+						<ielement id='SLT' name='Act-SEL' type='task'/>
+		                <ielement id='TQ' name='Technical Quality' type='softgoal'>
+							<ielementLink type='contribution' value='help'>
+								<ielement id='ACQ-TS' name='Act-ACQ-Tech' type='task'/>
+								<ielement id='ACQ-OS' name='Act-Learn' type='task'/>
+							</ielementLink>
+						</ielement>
+						<ielement id='USE' name='OSS Component Used (Deploy or Integrate)' type='goal'>
+							<ielementLink type='means-end'>
+								<ielement id='VOperational_Risk' name='Act-DEP' type='task'/>
+								<!--ielement id='INT' name='Act-INT' type='goal'/-->
+							</ielementLink>
+						</ielement>
+						<ielement id='TST-P' name='Act-TEST-Prod' type='task'/>
+						<ielement id='MNT-P' name='Act-MAINT-Prod' type='task'/>
+                    </ielementLink>
+                </ielement>
+            </boundary>
+        </actor>
+        <ielement id='DCM-T' name='Res-Tech-DOCUM' type='resource'>
+            <dependency>
+                <depender iref='ACQ-TS' aref='CMP'/>
+                <dependee iref='OSS-D' aref='COMM'/>
+            </dependency>
+        </ielement>
+        <ielement id='DCM-U' name='Res-User-DOCUM' type='resource'>
+            <dependency>
+                <depender iref='ACQ-OS' aref='CMP'/>
+                <dependee iref='RLS' aref='COMM'/>
+            </dependency>
+        </ielement>
+        <ielement id='OSSC+DCM' name='Res-OSS-Comp-with-Docum' type='resource'>
+            <dependency>
+                <depender iref='VOperational_Risk' aref='CMP'/>
+                <dependee iref='RLS' aref='COMM'/>
+            </dependency>
+        </ielement>
+    </diagram>
+</istarml>

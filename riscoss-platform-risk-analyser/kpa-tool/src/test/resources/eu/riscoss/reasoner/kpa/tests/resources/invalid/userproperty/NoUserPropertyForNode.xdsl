@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<smile version="1.0" id="BN1" numsamples="1000" discsamples="10000">
+	<properties>
+		<property id="Type">INDICATOR</property>
+	</properties>
+	<nodes>
+		<cpt id="Node1">
+			<state id="State0" />
+			<state id="State1" />
+			<probabilities>0.5 0.5</probabilities>
+		</cpt>
+	</nodes>
+	<extensions>
+		<genie version="1.0" app="GeNIe 2.0.5079.0" name="No user property" faultnameformat="nodestate">
+			<node id="Node1">
+				<name>Node1</name>
+				<interior color="e5f6f7" />
+				<outline color="000080" />
+				<font color="000000" name="Arial" size="8" />
+				<position>102 58 150 88</position>
+				<barchart active="true" width="128" height="64" />
+			</node>
+		</genie>
+	</extensions>
+</smile>

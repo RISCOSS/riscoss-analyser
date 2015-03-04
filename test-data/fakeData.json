@@ -1,0 +1,191 @@
+{
+  "result": {
+    "omm_planning": {
+      "type": "DISTRIBUTION",
+      "value": {
+        "values": [
+          1,
+          0,
+          0,
+          0,
+          0
+        ]
+      }
+    },
+    "omm_Requirements": {
+      "type": "DISTRIBUTION",
+      "value": {
+        "values": [
+          0,
+          0,
+          1
+        ]
+      }
+    },
+    "omm_Roadmap": {
+      "type": "DISTRIBUTION",
+      "value": {
+        "values": [
+          0,
+          0,
+          0,
+          1
+        ]
+      }
+    },
+    "Project_Activity": {
+      "type": "DISTRIBUTION",
+      "value": {
+        "values": [
+          0,
+          0,
+          0,
+          0,
+          1
+        ]
+      }
+    },
+    "Number_Contribs": {
+      "type": "DISTRIBUTION",
+      "value": {
+        "values": [
+          0,
+          0,
+          0,
+          0,
+          1
+        ]
+      }
+    },
+    "Number_Devs": {
+      "type": "DISTRIBUTION",
+      "value": {
+        "values": [
+          0,
+          0,
+          0,
+          0,
+          1
+        ]
+      }
+    },
+    "Activity_Ratio": {
+      "type": "DISTRIBUTION",
+      "value": {
+        "values": [
+          0,
+          1,
+          0,
+          0,
+          0
+        ]
+      }
+    },
+    "Unique_Lic": {
+      "type": "DISTRIBUTION",
+      "value": {
+        "values": [
+          0,
+          0,
+          0,
+          1,
+          0
+        ]
+      }
+    },
+    "Ratio_No_Lic": {
+      "type": "DISTRIBUTION",
+      "value": {
+        "values": [
+          0,
+          0,
+          1,
+          0,
+          0
+        ]
+      }
+    },
+    "omm_Licenses": {
+      "type": "DISTRIBUTION",
+      "value": {
+        "values": [
+          0,
+          0,
+          1,
+          0,
+          0
+        ]
+      }
+    },
+    "Test_Coverage": {
+      "type": "DISTRIBUTION",
+      "value": {
+        "values": [
+          0,
+          0,
+          0,
+          0,
+          1
+        ]
+      }
+    },
+    "Test_Success": {
+      "type": "DISTRIBUTION",
+      "value": {
+        "values": [
+          1,
+          0,
+          0,
+          0,
+          0
+        ]
+      }
+    },
+    "omm_testing": {
+      "type": "DISTRIBUTION",
+      "value": {
+        "values": [
+          0,
+          1,
+          0,
+          0
+        ]
+      }
+    },
+    "omm_Commits": {
+      "type": "DISTRIBUTION",
+      "value": {
+        "values": [
+          0,
+          0,
+          1,
+          0,
+          0
+        ]
+      }
+    },
+    "omm_Maintainability": {
+      "type": "DISTRIBUTION",
+      "value": {
+        "values": [
+          0,
+          1,
+          0,
+          0,
+          0
+        ]
+      }
+    },
+    "Test": {
+      "type": "DISTRIBUTION",
+      "value": {
+        "values": [
+          0,
+          0,
+          1,
+          0
+        ]
+      }
+    }
+  }
+}

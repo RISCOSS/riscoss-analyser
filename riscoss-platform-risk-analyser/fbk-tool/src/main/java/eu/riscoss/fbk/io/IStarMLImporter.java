@@ -1,0 +1,139 @@
+package eu.riscoss.fbk.io;
+
+import java.io.File;
+
+import eu.riscoss.fbk.language.Model;
+import eu.riscoss.fbk.language.Program;
+import eu.riscoss.fbk.language.Proposition;
+import eu.riscoss.fbk.language.Relation;
+import eu.riscoss.fbk.util.XmlNode;
+
+public class IStarMLImporter {
+	
+	Model model;
+	
+	public void importIstarML( XmlNode xml, Program program ) {
+		
+		if( !"istarml".equals( xml.getTag() ) ) return;
+		if( xml.getChildCount( "diagram" ) < 1 ) return;
+		
+		model = program.getModel();
+		
+		importDiagram( xml.item( "diagram", 0 ) );
+	}
+	
+	void importDiagram( XmlNode x ) {
+		for( XmlNode child : x.getChildren() ) {
+			extractProposition( child );
+		}
+		for( XmlNode child : x.getChildren() ) {
+			extractRelation( child );
+		}
+	}
+	
+	void extractProposition( XmlNode x ) {
+		
+		if( "actor".equals( x.getTag() ) ) {
+			
+		}
+		if( "ielement".equals( x.getTag() ) ) {
+			
+			try {
+				Proposition p = null;
+				
+				if( x.getAttr( "iref", null ) != null ) {
+					p = model.getProposition( x.getAttr("iref" ) );
+				}
+				else {
+					String type = x.getAttr( "type" );
+					if( type == null )
+						type = "proposition";
+					p = new Proposition( type, x.getAttr( "id", x.getAttr( "name" ) ) );
+					model.addProposition( p );
+				}
+				
+				if( p != null ) {
+					
+					for( String key : x.listAttributes() ) {
+						String value = x.getAttr( key );
+						if( "id".equals( value ) ) continue;
+					}
+				}
+			}
+			catch( Exception ex ) {
+				ex.printStackTrace();
+			}
+		}
+		
+		for( XmlNode child : x.getChildren() ) {
+			extractProposition( child );
+		}
+	}
+	
+	void extractRelation( XmlNode xml ) {
+		
+		for( XmlNode x : xml.getChildren() ) {
+			
+			try {
+			if( "ielementLink".equals( x.getTag() ) ) {
+				String type = x.getAttr( "type", null );
+				if( type == null )
+					type = "";
+				Relation r = new Relation( type );
+				r.setTarget( model.getProposition( xml.getAttr( "id", xml.getAttr( "name" ) ) ) );
+				
+				for( XmlNode child : x.getChildren( "ielement" ) ) {
+//					if( model.getProposition( child.getAttr( "id", child.getAttr( "iref", child.getAttr( "name", null ) ) ) ) == null )
+//							System.out.println();
+					r.addSource( model.getProposition( child.getAttr( "id", child.getAttr( "iref", child.getAttr( "name" ) ) ) ) );
+				}
+				
+				model.addRelation( r );
+			}
+//			else if( "boundary".equals( x.getTag() ) ) {
+//				Relation r = new Relation( "belongs-to" );
+//				System.out.println( xml.getAttr( "id" ) );
+//				r.setTarget( model.getProposition( xml.getAttr( "id" ) ) );
+//				
+//				for( XmlNode child : x.getChildren( "ielement" ) ) {
+//					r.addSource( model.getProposition( child.getAttr( "id", child.getAttr( "iref" ) ) ) );
+//				}
+//				
+//				model.addRelation( r );
+//			}
+			}
+			catch( Exception ex ) {
+				ex.printStackTrace();
+			}
+			
+			extractRelation( x );
+		}
+	}
+	
+	public static void main( String[] args ) {
+		File f = new File( "/Users/albertosiena/Moodbile_M20_v3.istarml" );
+		XmlNode xml = XmlNode.load( f );
+		
+		Program program = new Program();
+		
+		new IStarMLImporter().importIstarML( xml, program );
+		
+		System.out.println( "NODES" );
+		
+		for( String t : program.getModel().propositionTypes() ) {
+			System.out.println( "> " + t );
+			for( Proposition p : program.getModel().propositions( t ) ) {
+				System.out.println( p );
+			}
+		}
+		
+		System.out.println( "RELATIONS" );
+		
+		for( String t : program.getModel().relationTypes() ) {
+			System.out.println( t );
+			for( Relation r : program.getModel().relations( t ) ) {
+				System.out.println( r );
+			}
+		}
+	}
+}

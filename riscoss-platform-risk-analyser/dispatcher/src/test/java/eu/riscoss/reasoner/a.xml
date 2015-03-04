@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<riscoss>
+
+<script>
+	<![CDATA[
+	]]>
+	</script>
+
+<model type="riskmodel">
+
+<entities>
+	
+	<!--indicator id="i1" input="true" datatype="real"/>
+	<indicator id="i2" input="true" datatype="real"/-->
+	<!--situation id="s2" output="true"/-->
+	<situation id="s1" input="true" output="true"/>
+	<situation id="always" input="true"/>
+	<event id="e1" output="true"/>
+	<goal id="g1" output="true"/>
+	
+</entities>
+
+<relationships>
+	
+	<expose source="s1" target="e1"/>
+	<!--increase source="always" target="e1"/-->
+	<impact source="e1" target="g1"/>
+	
+</relationships>
+
+</model>
+</riscoss>

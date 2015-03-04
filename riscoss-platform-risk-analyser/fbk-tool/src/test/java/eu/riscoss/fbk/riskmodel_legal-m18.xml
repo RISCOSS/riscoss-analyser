@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<riscoss>
+
+<model type="riskmodel">
+    <entities>
+    
+    	<event id="root" output="true"/>
+         
+        <!-- INDICATORS interpreted as measures -->
+        <indicator id="i103a" label="Number of component licenses (Fossology)" datatype="integer" input="true" question="How many licenses does the component have?" function="1-(1/(x+1))"/>
+        
+		<indicator id="i103b" label="Amount of files without license (Fossology)" datatype="real" input="true" question="How many source files have been left without license disclaimer?" function="1-(1/(x+1))"/>
+		
+		<indicator id="i103c" label="Amount of files with unclear/unknown license (Fossology)" datatype="real" input="true" question="How many files have a licens but with unknown/unclear type?" function="1-(1/(x+1))"/>
+		
+		<indicator id="i91" label="Amount of licenses: viral (Fossology)" datatype="real" input="true" question="How many 'viral' licences does the component have?" function="1-(1/(x+1))"/>
+		
+		<indicator id="i93f" label="Amount of licenses: library viral (Fossology)" datatype="real" input="true" question="How many 'viral' library license does the component carry with?" function="1-(1/(x+1))"/>
+		
+		<indicator id="i93g" label="Amount of licenses: without constraints (Fossology)" datatype="real" input="true" question="How many free license does the component contain?" function="1-(1/(x+1))"/>
+		
+		<indicator id="i93b" input="true">
+			<property name="label" value="Amount of OSS code integrated"/>
+			<property name="datatype" value="integer"/>
+			<property name="question" value="What's the amount of OSS code integrated?"/>
+			<property name="function" value="1-(1/(x+1))"/>
+		</indicator>
+		
+		<indicator id="i93c" label="Technique used for integrating code (static/dynamic linking, copy)" datatype="list" options="static linking;dynamic linking; copy" input="true" question="How is integrated the integrated code (static/dynamic linking, copy)?" function="1-(1/(x+1))"/>
+		
+		<indicator id="i93d" label="Type of licenss in core components" datatype="string" input="true" question="What's the type of licenss in core components?" function="1-(1/(x+1))"/>
+		
+		<indicator id="i93h" label="Amount of component code imported/linked from other OSS projects" datatype="real" input="true" question="What's the amount of component code imported/linked from other OSS projects" function="1-(1/(x+1))"/>
+		
+		<indicator id="i120" label="Percentage of US code" datatype="integer" input="true" question="What's the percentage of US code?" function="1-(1/(x+1))"/>
+		
+		<!-- RISK EVENTS -->
+			<event id="R115" label="Intellectual property issue" output="true"/>
+				<event id="R103" label="Infringe other's intellectual property" output="true"/>
+		<event id="R91" label="License issue" output="true"/>
+			<event id="R93" label="License incompatibility or effect propagation" output="true"/>
+				<event id="R931" label="Component license propagates virality" output="true"/>
+				<event id="R932" label="Component license incompatible" output="true"/>
+				<event id="R933" label="Adopted OSS changes license" output="true"/>
+			<event id="R120" label="Trade compliance issue" output="true"/>
+			
+		<!--event id="R90" label="Lose own intellectual property"/>
+		<event id="R116" label="Lack of liable providers"/>
+		<event id="R94" label="Liability issue"/-->
+		
+		<!-- CAUSES interpreted as indicators. These indicators have a threshold. 
+			Situation-expose->Event:  ...the more likely the event is to happen   neg.: protect
+				-->
+        <situation id="s1" label="Presence of License virality" threshold="0.5"/> <!-- i91, i93f, i93g, i93c-->
+        <situation id="s2" label="Lack of License compatibility" threshold="0.5"/> <!-- i93d, i103c -->
+		<situation id="s3" label="Presence License uncertainty" threshold="0.5"/> <!-- i103b, i103c, -i93g, -->
+		<situation id="s4" label="Code problematicity" threshold="0.5"/> <!-- i103a, i93b, i93h -->
+		<situation id="s5" label="Availability and verifiability of information on ownership and quality assurance" threshold="0.5"/> <!-- i93d, i93h -->
+		<situation id="s6" label="Percentage of US code > 10%" threshold="10"/> <!-- i120 -->
+		<situation id="s7" label="Presence of strong key cryptographic algorithms" threshold="1"/> <!-- to be filled by hand -->
+               
+    </entities>
+    
+    <relationships>
+        <indicate source="i91" target="s1" connector="average()"/>
+        <indicate source="i93f" target="s1" connector="reinforcement()"/>
+		<indicate source="i93g" target="s1" connector="normalize();calc_average();"/>
+		<indicate source="i93c" target="s1"/>
+		<indicate source="i93d" target="s2"/>
+		<indicate source="i103c" target="s2"/>
+		<indicate source="i103b" target="s3"/>
+		<indicate source="i103c" target="s3"/>
+		<indicate source="i93g" target="s3"/>
+		<indicate source="i103a" target="s4"/>
+		<indicate source="i93b" target="s4"/>
+		<indicate source="i93h" target="s4"/>
+		<indicate source="i93d" target="s5"/>
+		<indicate source="i93h" target="s5"/>
+		<indicate source="i120" target="s6"/>
+ 
+		<expose source="s1" target="R931"/>
+		<expose source="s2" target="R932"/>
+		<expose source="s3" target="R103"/>
+		<expose source="s4" target="R932"/>
+		<expose source="s5" target="R933"/>
+		<expose source="s6" target="R120"/>
+		<expose source="s7" target="R120"/>
+        <!--<protect source="s1" target="e1"/>-->
+        
+        <expose source="R93,R120,R115" target="root"/>
+		
+		<!--situation id="always"/>
+		
+		<increase source="always" target="R103"/-->
+		
+		<!--building the relevant "risk" hierarchy"-->
+		<expose source="R103" target="R115"/>	
+		<expose source="R931" target="R93"/>	
+		<expose source="R932" target="R93"/>	
+		<expose source="R933" target="R93"/>	
+		<expose source="R93" target="R91"/>	
+       
+    </relationships>
+</model>
+
+</riscoss>

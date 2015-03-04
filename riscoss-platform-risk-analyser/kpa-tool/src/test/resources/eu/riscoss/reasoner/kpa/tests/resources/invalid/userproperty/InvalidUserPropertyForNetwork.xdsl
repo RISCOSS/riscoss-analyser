@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<smile version="1.0" id="BN1" numsamples="1000" discsamples="10000">
+	<properties>
+		<property id="Type">XZY</property>
+	</properties>
+	<nodes>
+	</nodes>
+	<extensions>
+		<genie version="1.0" app="GeNIe 2.0.5079.0" name="No user property" faultnameformat="nodestate">
+		</genie>
+	</extensions>
+</smile>

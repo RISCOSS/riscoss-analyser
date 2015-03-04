@@ -1,0 +1,320 @@
+{
+  "result": {
+    "Unique_Lic": {
+      "value": {
+        "values": [
+          1,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "rawValue": 2,
+      "type": "DISTRIBUTION",
+      "description": "Number of software copyright licenses"
+    },
+    "Ratio_No_Lic": {
+      "value": {
+        "values": [
+          1,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "rawValue": 0,
+      "type": "DISTRIBUTION",
+      "description": "Ratio of files with no license header"
+    },
+    "Blocker_Issue": {
+      "value": {
+        "values": [
+          0,
+          1,
+          0,
+          0,
+          0
+        ]
+      },
+      "rawValue": 1,
+      "type": "DISTRIBUTION",
+      "description": "Number of open issues labeled blocker"
+    },
+    "Critical_Issue": {
+      "value": {
+        "values": [
+          1,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "rawValue": 0,
+      "type": "DISTRIBUTION",
+      "description": "Number of open issues labeled critical"
+    },
+    "Test_Coverage": {
+      "value": {
+        "values": [
+          0,
+          0,
+          0,
+          1,
+          0
+        ]
+      },
+      "rawValue": 24.3,
+      "type": "DISTRIBUTION",
+      "description": "Test Coverage"
+    },
+    "Test_Success": {
+      "value": {
+        "values": [
+          1,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "rawValue": 96.3,
+      "type": "DISTRIBUTION",
+      "description": "Risk from test failures"
+    },
+    "omm_Software": {
+      "value": {
+        "values": [
+          0,
+          0,
+          1,
+          0,
+          0
+        ]
+      },
+      "rawValue": 4,
+      "type": "DISTRIBUTION",
+      "description": "OMM development environment risk"
+    },
+    "omm_documentation": {
+      "value": {
+        "values": [
+          0,
+          0,
+          1,
+          0,
+          0
+        ]
+      },
+      "rawValue": 5,
+      "type": "DISTRIBUTION",
+      "description": "OMM documentation risk"
+    },
+    "omm_Configuration": {
+      "value": {
+        "values": [
+          0,
+          1,
+          0,
+          0,
+          0
+        ]
+      },
+      "rawValue": 1,
+      "type": "DISTRIBUTION",
+      "description": "OMM risk from configuration"
+    },
+    "omm_Licenses": {
+      "value": {
+        "values": [
+          0,
+          0,
+          1,
+          0,
+          0
+        ]
+      },
+      "rawValue": 2,
+      "type": "DISTRIBUTION",
+      "description": "OMM software copyright license risk"
+    },
+    "omm_Stakeholders": {
+      "value": {
+        "values": [
+          0,
+          0,
+          0,
+          1,
+          0
+        ]
+      },
+      "rawValue": 7,
+      "type": "DISTRIBUTION",
+      "description": "OMM risk from lack of effective stakeholders"
+    },
+    "omm_Maintainability": {
+      "value": {
+        "values": [
+          0,
+          0,
+          0,
+          0,
+          1
+        ]
+      },
+      "rawValue": 4,
+      "type": "DISTRIBUTION",
+      "description": "OMM maintainability risk"
+    },
+    "omm_planning": {
+      "value": {
+        "values": [
+          0,
+          0,
+          0,
+          0,
+          1
+        ]
+      },
+      "rawValue": 4,
+      "type": "DISTRIBUTION",
+      "description": "OMM planning related risk"
+    },
+    "omm_Standards": {
+      "value": {
+        "values": [
+          0,
+          1,
+          0
+        ]
+      },
+      "rawValue": 1,
+      "type": "DISTRIBUTION",
+      "description": "OMM standards related risk"
+    },
+    "omm_Commits": {
+      "value": {
+        "values": [
+          0,
+          0,
+          0,
+          1,
+          0
+        ]
+      },
+      "rawValue": 5,
+      "type": "DISTRIBUTION",
+      "description": "OMM risk from open bug reports"
+    },
+    "omm_testing": {
+      "value": {
+        "values": [
+          0,
+          0,
+          1,
+          0
+        ]
+      },
+      "rawValue": 2,
+      "type": "DISTRIBUTION",
+      "description": "OMM testing risk"
+    },
+    "omm_Roadmap": {
+      "value": {
+        "values": [
+          0,
+          0,
+          0,
+          1
+        ]
+      },
+      "rawValue": 2,
+      "type": "DISTRIBUTION",
+      "description": "OMM roadmap quality risk"
+    },
+    "omm_Requirements": {
+      "value": {
+        "values": [
+          0,
+          0,
+          1
+        ]
+      },
+      "rawValue": 2,
+      "type": "DISTRIBUTION",
+      "description": "OMM requirements engineering risk"
+    },
+    "Project_Activity": {
+      "value": {
+        "values": [
+          0,
+          0,
+          0,
+          0,
+          1
+        ]
+      },
+      "rawValue": 5,
+      "type": "DISTRIBUTION",
+      "description": "OpenHub project activity level"
+    },
+    "Number_Contribs": {
+      "value": {
+        "values": [
+          0,
+          0,
+          0,
+          0,
+          1
+        ]
+      },
+      "rawValue": 0,
+      "type": "DISTRIBUTION",
+      "description": "Number of contributors"
+    },
+    "Number_Devs": {
+      "value": {
+        "values": [
+          0,
+          0,
+          0,
+          0,
+          1
+        ]
+      },
+      "rawValue": 0,
+      "type": "DISTRIBUTION",
+      "description": "OW2Forge number of developers"
+    },
+    "Activity_Ratio": {
+      "value": {
+        "values": [
+          0,
+          0,
+          0,
+          0,
+          1
+        ]
+      },
+      "rawValue": 0,
+      "type": "DISTRIBUTION",
+      "description": "Risk from many contributors / few maintainers"
+    },
+    "Test": {
+      "value": {
+        "values": [
+          0,
+          0,
+          1,
+          0
+        ]
+      },
+      "rawValue": 0.1,
+      "type": "DISTRIBUTION",
+      "description": "unused"
+    }
+  },
+  "warnings": []
+}
