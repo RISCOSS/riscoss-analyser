@@ -5,9 +5,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import eu.riscoss.reasoner.impl.FBKRiskAnalysisEngine;
-import eu.riscoss.reasoner.impl.KPARiskAnalysisTool;
-
 public class CompoundAnalysisEngine implements RiskAnalysisEngine {
 	
 	public static void main( String[] args ) {}
@@ -25,13 +22,31 @@ public class CompoundAnalysisEngine implements RiskAnalysisEngine {
 	
 	public CompoundAnalysisEngine( boolean useDefaultEngineSet ) {
 		if( useDefaultEngineSet ) {
-			addEngine( new KPARiskAnalysisTool() );
-			addEngine( new FBKRiskAnalysisEngine() );
+			addEngine( "eu.riscoss.reasoner.impl.KPARiskAnalysisTool" );
+			addEngine( "eu.riscoss.reasoner.KPARiskAnalysisTool" );
+			addEngine( "eu.riscoss.reasoner.FBKRiskAnalysisEngine" );
 		}
 		else {
 		}
 	}
-
+	
+	public void addEngine( String clsName ) {
+		try {
+			Class<?> cls = Class.forName( clsName );
+			if( cls != null ) {
+				RiskAnalysisEngine rae = (RiskAnalysisEngine)cls.newInstance();
+				if( rae != null ) {
+					addEngine( rae );
+				}
+			}
+		} catch (ClassNotFoundException e) {
+		} catch (InstantiationException e) {
+			e.printStackTrace();
+		} catch (IllegalAccessException e) {
+			e.printStackTrace();
+		}
+	}
+	
 	public void addEngine( RiskAnalysisEngine engine ) {
 		
 		engines.put( "" + engine.hashCode(), engine );

@@ -1,4 +1,4 @@
-package eu.riscoss.fbk.risk;
+package eu.riscoss.reasoner;
 
 import java.io.PrintStream;
 import java.util.Iterator;
@@ -23,7 +23,6 @@ import eu.riscoss.fbk.semantics.Axiom;
 import eu.riscoss.fbk.semantics.Condition;
 import eu.riscoss.fbk.semantics.Rule;
 import eu.riscoss.fbk.semantics.Semantics;
-import eu.riscoss.fbk.sysex.WorkingDirectory;
 import eu.riscoss.reasoner.Evidence;
 
 public class RiskEvaluation implements Iterable<Solution>, Analysis
@@ -39,10 +38,6 @@ public class RiskEvaluation implements Iterable<Solution>, Analysis
 	
 	public void setProgram(Program program) {
 		this.program = program;
-	}
-	
-	public void run(WorkingDirectory dir) {
-		run(program);
 	}
 	
 	public void run(Program program) {
@@ -150,9 +145,8 @@ public class RiskEvaluation implements Iterable<Solution>, Analysis
 		}
 		
 		for (String type : program.getModel().relationTypes()) {
+			
 			for (Relation r : program.getModel().relations(type)) {
-				if( r.getStereotype().indexOf( "expose" ) != -1 )
-					System.out.print("");
 				
 				for (Rule rule : semantics.rules.list(type)) {
 					

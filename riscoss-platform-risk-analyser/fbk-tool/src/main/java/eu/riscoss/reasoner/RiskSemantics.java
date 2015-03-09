@@ -1,10 +1,11 @@
-package eu.riscoss.fbk.risk;
+package eu.riscoss.reasoner;
 
 import eu.riscoss.fbk.semantics.Axiom;
 import eu.riscoss.fbk.semantics.Condition;
 import eu.riscoss.fbk.semantics.Operator;
 import eu.riscoss.fbk.semantics.Rule;
 import eu.riscoss.fbk.semantics.Semantics;
+
 
 public class RiskSemantics extends Semantics {
 	

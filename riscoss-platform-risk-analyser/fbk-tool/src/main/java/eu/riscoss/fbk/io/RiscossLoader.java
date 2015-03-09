@@ -44,7 +44,7 @@ public class RiscossLoader {
 		if( program.getModel().getProposition( "always" ) == null ) {
 			Proposition always = new Proposition( "always" );
 			program.getModel().addProposition( always );
-			program.getScenario().addConstraint( "always", "st", "1.0" );
+			program.getScenario().setConstraint( "always", "st", "1.0" );
 		}
 //		else
 		{
@@ -68,6 +68,17 @@ public class RiscossLoader {
 //				r.addSource( always );
 //				r.setTarget( p );
 //				program.getModel().addRelation( r );
+			}
+		}
+		for( Proposition p : program.getModel().propositions( "indicator" ) ) {
+			if( p.getProperty( "default-value", null ) != null ) {
+				try {
+					double d = Double.parseDouble( p.getProperty( "default-value", null ) );
+					program.getScenario().setConstraint( p.getId(), "st", "" + d );
+				}
+				catch( Exception ex ) {
+					ex.printStackTrace();
+				}
 			}
 		}
 	}
