@@ -16,13 +16,10 @@ package eu.riscoss;
 import java.lang.reflect.Method;
 import java.lang.reflect.Field;
 
-import eu.riscoss.JSmile;
-
 public class RemoteRiskAnalyserMain
 {
     public static void main(String[] args) throws Exception
     {
-        JSmile.load();
         Class rra = Class.forName("eu.riscoss.RemoteRiskAnalyser");
         Method meth = rra.getMethod("main", String[].class);
         meth.invoke(null, (Object)args);
