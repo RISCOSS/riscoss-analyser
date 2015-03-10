@@ -6,7 +6,7 @@ This is the risk analisys core of the RISCOSS project.
 
 * Java1.7
 * Maven3
-* Linux (the risk analyzer contains a C language binary)
+* **optional** Linux (the Bayesian Network risk analyzer contains a C language binary)
 * **optional** Download and copy the [Smile](https://dslpitt.org/genie) binary library to `riscoss-platform-jsmile/src/main/resources/`. The library to copy depends on your operating system. For Linux/X86_64 it's called `libjsmile.so` (without this the analyser will have limited functionality)
 
 ## Build
