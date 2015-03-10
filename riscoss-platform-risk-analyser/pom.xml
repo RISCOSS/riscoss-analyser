@@ -13,7 +13,7 @@
     <module>api</module>
     <module>dispatcher</module>
     <module>fbk-tool</module>
-    <module>kpa-tool</module>
+<!--    <module>kpa-tool</module> Dropped until we understand how to proceed re jsmile -->
   </modules>
 
 </project>
