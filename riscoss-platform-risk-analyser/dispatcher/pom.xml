@@ -42,10 +42,10 @@
 			<artifactId>riscoss-fbk</artifactId>
 			<version>${project.version}</version>
 		</dependency>
-		<dependency>
+		<!--dependency>
 			<groupId>eu.riscoss</groupId>
 			<artifactId>riscoss-kpa</artifactId>
 			<version>${project.version}</version>
-		</dependency>
+		</dependency-->
 	</dependencies>
 </project>
