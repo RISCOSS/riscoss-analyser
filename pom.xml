@@ -10,7 +10,6 @@
   <name>RISCOSS Analyzer - Parent POM</name>
 
   <modules>
-    <module>riscoss-platform-jsmile</module>
     <module>riscoss-platform-risk-analyser</module>
     <module>riscoss-remote-risk-analyser</module>
   </modules>
