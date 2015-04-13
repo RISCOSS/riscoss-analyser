@@ -1,4 +1,21 @@
-package eu.riscoss.reasoner.impl;
+/*
+   (C) Copyright 2013-2016 The RISCOSS Project Consortium
+   
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+     http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+
+*/
+
+package eu.riscoss.reasoner;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -10,7 +27,6 @@ import eu.riscoss.fbk.language.Proposition;
 import eu.riscoss.fbk.language.Relation;
 import eu.riscoss.fbk.lp.FunctionsLibrary;
 import eu.riscoss.fbk.lp.JsExtension;
-import eu.riscoss.fbk.risk.RiskEvaluation;
 import eu.riscoss.reasoner.AnalysisResponse;
 import eu.riscoss.reasoner.Chunk;
 import eu.riscoss.reasoner.DataType;
@@ -95,11 +111,13 @@ public class FBKRiskAnalysisEngine implements RiskAnalysisEngine
 		case OUTPUT_DATA: {
 			ArrayList<Chunk> list = new ArrayList<Chunk>();
 			for( Proposition p : program.getModel().propositions() ) {
-				if( p.getStereotype().equals( "goal" ) == false )
-					if( p.getStereotype().equals( "task" ) == false )
-					if( p.getProperty( "output", "false" ).equalsIgnoreCase( "false" ) ) continue;
-				Chunk chunk = new Chunk( p.getId(), p.getStereotype() );
-				list.add( chunk );
+//				if( p.getStereotype().equals( "goal" ) == false )
+//					if( p.getStereotype().equals( "task" ) == false )
+//						if( p.getProperty( "output", "false" ).equalsIgnoreCase( "false" ) ) continue;
+				if( "true".equalsIgnoreCase( p.getProperty( "output", "false" ) ) ) {
+					Chunk chunk = new Chunk( p.getId(), p.getStereotype() );
+					list.add( chunk );
+				}
 			}
 			return list;
 		}
@@ -112,7 +130,58 @@ public class FBKRiskAnalysisEngine implements RiskAnalysisEngine
 	
 	@Override
 	public <T> T getDefaultValue( Chunk chunk ) {
-		return null;
+		Proposition p = program.getModel().getProposition( chunk.getId() );
+		if( p == null ) return null;
+		if( "true".equals( p.getProperty( "required", "true" ) ) ) {
+			if( p.getProperty( "default-value", null ) == null ) {
+				return null;
+			}
+		}
+		if( p.getProperty( "datatype", "real" ) != null ) {
+			DataType dt = DataType.valueOf( p.getProperty( "datatype", "" ).toUpperCase() );
+			String def = p.getProperty( "default-value", null );
+			if( def == null ) return null;
+			switch( dt ) {
+			case EVIDENCE:{
+				return new Field( DataType.EVIDENCE, new Evidence( 0, 0 ) ).getValue();
+			}
+			case REAL: {
+				try { 
+					double pos = 0;
+					pos = Double.parseDouble( def );
+					return new Field( DataType.REAL, pos ).getValue();
+				} catch( Exception ex ) {
+					return null;
+				}
+			}
+			case INTEGER: {
+				try { 
+					int pos = 0;
+					pos = Integer.parseInt( def );
+					return new Field( DataType.INTEGER, pos ).getValue();
+				} catch( Exception ex ) {
+					return null;
+				}
+			}
+			case STRING: {
+				return new Field( DataType.STRING, def ).getValue();
+			}
+			case DISTRIBUTION:
+			case NaN:
+			default:
+				// We do not support the DISTRIBUTION case
+				throw new RuntimeException( "Unsupported data type: " + dt.toString() );
+			}
+		}
+		else {
+			String val = p.getProperty( "default-value", null );
+			if( val == null ) return null;
+			double pos = 0;
+			try { 
+				pos = Double.parseDouble( val );
+			} catch( Exception ex ) {}
+			return new Field( DataType.EVIDENCE, new Evidence( pos, 0 ) ).getValue();
+		}
 	}
 	
 	@Override
@@ -126,7 +195,7 @@ public class FBKRiskAnalysisEngine implements RiskAnalysisEngine
 		analysis = new RiskEvaluation();
 		
 		JsExtension.get().put( "fx", FunctionsLibrary.get() );
-
+		
 		analysis.run(program);
 		
 		return AnalysisResponse.DONE;
@@ -193,6 +262,9 @@ public class FBKRiskAnalysisEngine implements RiskAnalysisEngine
 			}
 		}
 		case OUTPUT_VALUE:
+			if( analysis == null ) {
+				return new Field( DataType.EVIDENCE, new Evidence( 0, 0 ) );
+			}
 			return new Field( DataType.EVIDENCE, new Evidence( 
 					analysis.getPositiveValue( chunk.getId() ), 
 					analysis.getNegativeValue( chunk.getId() ) ) );
@@ -200,9 +272,13 @@ public class FBKRiskAnalysisEngine implements RiskAnalysisEngine
 			Relation r = program.getModel().getRelation( chunk.getId() );
 			return new Field( DataType.REAL, r.getWeight() );
 		}
-		case DESCRIPTION:
+		case LABEL:
 			return new Field( DataType.STRING,
 					program.getModel().getProposition( chunk.getId() ).getProperty( "label", 
+							program.getModel().getProposition( chunk.getId() ).getProperty( "name", chunk.getId() ) ) );
+		case DESCRIPTION:
+			return new Field( DataType.STRING,
+					program.getModel().getProposition( chunk.getId() ).getProperty( "description", 
 							program.getModel().getProposition( chunk.getId() ).getProperty( "name", chunk.getId() ) ) );
 		case QUESTION:
 			return new Field( DataType.STRING,
@@ -235,7 +311,7 @@ public class FBKRiskAnalysisEngine implements RiskAnalysisEngine
 				}
 			}
 		}
-			break;
+		break;
 		case MAX: {
 			Proposition p = program.getModel().getProposition( chunk.getId() );
 			if( p == null ) return null;
@@ -262,7 +338,7 @@ public class FBKRiskAnalysisEngine implements RiskAnalysisEngine
 				}
 			}
 		}
-			break;
+		break;
 		default:
 			break;
 		}
@@ -274,7 +350,7 @@ public class FBKRiskAnalysisEngine implements RiskAnalysisEngine
 		if( ret == null ) ret = "";
 		return ret;
 	}
-
+	
 	@Override
 	public void setField(Chunk chunk, FieldType type, Field f) {
 		switch( type ) {
@@ -292,10 +368,10 @@ public class FBKRiskAnalysisEngine implements RiskAnalysisEngine
 				break;
 			case EVIDENCE:
 				program.getScenario().setConstraint( chunk.getId(), "st", "" + ((Evidence)f.getValue()).getPositive() );
-				program.getScenario().setConstraint( chunk.getId(), "sf", "" + ((Evidence)f.getValue()).getNegative() );
+				program.getScenario().addConstraint( chunk.getId(), "sf", "" + ((Evidence)f.getValue()).getNegative() );
 				break;
-				default:
-					break;
+			default:
+				break;
 			}
 			break;
 		case OUTPUT_VALUE:
@@ -309,9 +385,9 @@ public class FBKRiskAnalysisEngine implements RiskAnalysisEngine
 				ex.printStackTrace();
 			}
 		}
-			break;
-			
-			default:break;
+		break;
+		
+		default:break;
 		}
 	}
 }

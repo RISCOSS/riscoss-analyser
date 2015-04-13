@@ -1,5 +1,21 @@
-package eu.riscoss.fbk.lp;
+/*
+   (C) Copyright 2013-2016 The RISCOSS Project Consortium
+   
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
 
+     http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+
+*/
+
+package eu.riscoss.fbk.lp;
 
 import java.security.InvalidParameterException;
 import java.util.LinkedList;
@@ -77,7 +93,7 @@ public class Node {
 		setSatLabel(getSatLabel());
 	}
 	
-	void setDenLabel(Label aLabel) {
+	public void setDenLabel(Label aLabel) {
 		checkLabelConsistency(aLabel, getDenLabel());
 		// stores the current label in the old label field
 		oldDenLabel = denLabel;

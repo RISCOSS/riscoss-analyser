@@ -1,4 +1,21 @@
-package eu.riscoss.fbk.risk;
+/*
+   (C) Copyright 2013-2016 The RISCOSS Project Consortium
+   
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+     http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+
+*/
+
+package eu.riscoss.reasoner;
 
 import java.io.PrintStream;
 import java.util.Iterator;
@@ -23,7 +40,6 @@ import eu.riscoss.fbk.semantics.Axiom;
 import eu.riscoss.fbk.semantics.Condition;
 import eu.riscoss.fbk.semantics.Rule;
 import eu.riscoss.fbk.semantics.Semantics;
-import eu.riscoss.fbk.sysex.WorkingDirectory;
 import eu.riscoss.reasoner.Evidence;
 
 public class RiskEvaluation implements Iterable<Solution>, Analysis
@@ -39,10 +55,6 @@ public class RiskEvaluation implements Iterable<Solution>, Analysis
 	
 	public void setProgram(Program program) {
 		this.program = program;
-	}
-	
-	public void run(WorkingDirectory dir) {
-		run(program);
 	}
 	
 	public void run(Program program) {
@@ -150,9 +162,8 @@ public class RiskEvaluation implements Iterable<Solution>, Analysis
 		}
 		
 		for (String type : program.getModel().relationTypes()) {
+			
 			for (Relation r : program.getModel().relations(type)) {
-				if( r.getStereotype().indexOf( "expose" ) != -1 )
-					System.out.print("");
 				
 				for (Rule rule : semantics.rules.list(type)) {
 					

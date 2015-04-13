@@ -1,3 +1,20 @@
+/*
+   (C) Copyright 2013-2016 The RISCOSS Project Consortium
+   
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+     http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+
+*/
+
 package eu.riscoss.fbk.language;
 
 import java.util.ArrayList;
@@ -5,25 +22,21 @@ import java.util.HashMap;
 
 public class Scenario
 {
-	public static class PreferencePair
-	{
+	public static class PreferencePair {
 		public String	mostPreferred;
 		public String	lessPreferred;
 	}
 	
-	public static class Pair
-	{
+	public static class Pair {
 		public String	label;
 		public String	value;
 		
-		public Pair( String k, String v )
-		{
+		public Pair( String k, String v ) {
 			label = k;
 			value = v;
 		}
 		
-		public String toString()
-		{
+		public String toString() {
 			return "[" + label + "=" + value + "]";
 		}
 	}
@@ -38,35 +51,29 @@ public class Scenario
 	
 	static final ArrayList<Pair>		emptylist	= new ArrayList<Pair>();
 	
-	public Scenario( Model model )
-	{
+	public Scenario( Model model ) {
 		this.model = model;
 	}
 	
-	public void addConstraint( String id, String label )
-	{
+	public void addConstraint( String id, String label ) {
 		ArrayList<Pair> list = constraints.get( id );
-		if( list == null )
-		{
+		if( list == null ) {
 			list = new ArrayList<Pair>();
 			constraints.put( id, list );
 		}
 		list.add( new Pair( label, null ) );
 	}
 	
-	public void addConstraint( String id, String label, String value )
-	{
+	public void addConstraint( String id, String label, String value ) {
 		ArrayList<Pair> list = constraints.get( id );
-		if( list == null )
-		{
+		if( list == null ) {
 			list = new ArrayList<Pair>();
 			constraints.put( id, list );
 		}
 		list.add( new Pair( label, value ) );
 	}
 	
-	public void setConstraint( String id, String label, String value )
-	{
+	public void setConstraint( String id, String label, String value ) {
 		ArrayList<Pair> list = constraints.get( id );
 		if( list == null ) {
 			list = new ArrayList<Pair>();
@@ -116,8 +123,7 @@ public class Scenario
 		return preferences;
 	}
 	
-	public Iterable<String> keys()
-	{
+	public Iterable<String> keys() {
 		return constraints.keySet();
 	}
 	

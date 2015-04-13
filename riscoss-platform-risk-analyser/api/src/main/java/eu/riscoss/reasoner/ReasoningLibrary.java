@@ -1,3 +1,20 @@
+/*
+   (C) Copyright 2013-2016 The RISCOSS Project Consortium
+   
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+     http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+
+*/
+
 package eu.riscoss.reasoner;
 
 import java.util.ArrayList;
@@ -9,58 +26,26 @@ public class ReasoningLibrary
 {
 	private static final ReasoningLibrary instance = new ReasoningLibrary();
 	
-	public static ReasoningLibrary get()
-	{
+	public static ReasoningLibrary get() {
 		return instance;
 	}
 	
-	Map<String,RiskAnalysisStructure> engines = new HashMap<String,RiskAnalysisStructure>();
+	Map<String,RiskAnalysisEngine> engines = new HashMap<>();
 	
 	List<String> classes = new ArrayList<String>();
 	
 	private ReasoningLibrary() {
-		for( String className : new ClassList( "eu.riscoss.reasoner.impl" ) ) {
-			try {
-				Class<?> cls = Class.forName( className );
-				if( RiskAnalysisEngine.class.isAssignableFrom( cls ) ) {
-					classes.add( className );
-				}
-			}
-			catch( Exception ex ) {}
-		}
+		classes.add( "eu.riscoss.reasoner.CompoundAnalysisEngine" );
+		classes.add( "eu.riscoss.reasoner.FBKRiskAnalysisEngine" );
 	}
 	
 	public RiskAnalysisEngine createRiskAnalysisEngine() {
-		try {
-			return (RiskAnalysisEngine) Class.forName( "eu.riscoss.reasoner.CompoundAnalysisEngine" ).newInstance();
+		for( String clsName : classes ) {
+			try {
+				return (RiskAnalysisEngine) Class.forName( clsName ).newInstance();
+			}
+			catch( Exception ex ) {}
 		}
-		catch( Exception ex ) {}
-		
-		return null;
-	}
-	
-	// TODO: Remove?
-	public RiskAnalysisStructure createRiskStructure() {
-		try {
-			return (RiskAnalysisStructure) Class.forName( classes.get( 0 ) ).newInstance();
-		}
-		catch( Exception ex ) {}
-		
-		return null;
-	}
-	
-	List<String> getRiskAnalysisEngineList() {
-		return classes;
-	}
-	
-	public RiskAnalysisStructure createRiskReasoner( String name ) {
-		if( name == null ) return createRiskStructure();
-		return engines.get( name );
-	}
-	
-	public RiskReasoner createReasoner(RiskAnalysisStructure riskStructure) {
-		if( riskStructure instanceof RiskReasoner )
-			return (RiskReasoner)riskStructure;
 		
 		return null;
 	}
