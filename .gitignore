@@ -1,9 +1,6 @@
 target
-<<<<<<< HEAD
 .project
 .classpath
 .settings
 bin/
 lib/
-=======
->>>>>>> origin/master
