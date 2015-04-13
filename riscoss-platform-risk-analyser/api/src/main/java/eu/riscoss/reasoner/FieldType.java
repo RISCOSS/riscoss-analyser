@@ -26,9 +26,10 @@ package eu.riscoss.reasoner;
 public enum FieldType {
 	INPUT_VALUE,		// The field is an input value
 	OUTPUT_VALUE,		// The field is an output value
-	WEIGHT,				// The field contains an arc's weight value (FBK implementation)
-	DESCRIPTION,		// The field contains the description of the chunk
-	QUESTION,			// The field contains the question to be asked to the user for input
+	WEIGHT,				// Arc's weight value (FBK implementation)
+	LABEL,				// User-friendly short identifier
+	DESCRIPTION,		// Long description of the chunk
+	QUESTION,			// Question to be asked to the user for input
 	TYPE,				// Goal, Risk or Indicator
 	MIN,				// Minimum value in a range, if needed
 	MAX					// Maximumvalue in a range, if needed

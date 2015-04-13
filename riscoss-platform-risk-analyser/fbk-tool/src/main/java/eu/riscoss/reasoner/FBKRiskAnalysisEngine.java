@@ -111,11 +111,13 @@ public class FBKRiskAnalysisEngine implements RiskAnalysisEngine
 		case OUTPUT_DATA: {
 			ArrayList<Chunk> list = new ArrayList<Chunk>();
 			for( Proposition p : program.getModel().propositions() ) {
-				if( p.getStereotype().equals( "goal" ) == false )
-					if( p.getStereotype().equals( "task" ) == false )
-						if( p.getProperty( "output", "false" ).equalsIgnoreCase( "false" ) ) continue;
-				Chunk chunk = new Chunk( p.getId(), p.getStereotype() );
-				list.add( chunk );
+//				if( p.getStereotype().equals( "goal" ) == false )
+//					if( p.getStereotype().equals( "task" ) == false )
+//						if( p.getProperty( "output", "false" ).equalsIgnoreCase( "false" ) ) continue;
+				if( "true".equalsIgnoreCase( p.getProperty( "output", "false" ) ) ) {
+					Chunk chunk = new Chunk( p.getId(), p.getStereotype() );
+					list.add( chunk );
+				}
 			}
 			return list;
 		}
@@ -260,6 +262,9 @@ public class FBKRiskAnalysisEngine implements RiskAnalysisEngine
 			}
 		}
 		case OUTPUT_VALUE:
+			if( analysis == null ) {
+				return new Field( DataType.EVIDENCE, new Evidence( 0, 0 ) );
+			}
 			return new Field( DataType.EVIDENCE, new Evidence( 
 					analysis.getPositiveValue( chunk.getId() ), 
 					analysis.getNegativeValue( chunk.getId() ) ) );
@@ -267,9 +272,13 @@ public class FBKRiskAnalysisEngine implements RiskAnalysisEngine
 			Relation r = program.getModel().getRelation( chunk.getId() );
 			return new Field( DataType.REAL, r.getWeight() );
 		}
-		case DESCRIPTION:
+		case LABEL:
 			return new Field( DataType.STRING,
 					program.getModel().getProposition( chunk.getId() ).getProperty( "label", 
+							program.getModel().getProposition( chunk.getId() ).getProperty( "name", chunk.getId() ) ) );
+		case DESCRIPTION:
+			return new Field( DataType.STRING,
+					program.getModel().getProposition( chunk.getId() ).getProperty( "description", 
 							program.getModel().getProposition( chunk.getId() ).getProperty( "name", chunk.getId() ) ) );
 		case QUESTION:
 			return new Field( DataType.STRING,
@@ -359,7 +368,7 @@ public class FBKRiskAnalysisEngine implements RiskAnalysisEngine
 				break;
 			case EVIDENCE:
 				program.getScenario().setConstraint( chunk.getId(), "st", "" + ((Evidence)f.getValue()).getPositive() );
-				program.getScenario().setConstraint( chunk.getId(), "sf", "" + ((Evidence)f.getValue()).getNegative() );
+				program.getScenario().addConstraint( chunk.getId(), "sf", "" + ((Evidence)f.getValue()).getNegative() );
 				break;
 			default:
 				break;

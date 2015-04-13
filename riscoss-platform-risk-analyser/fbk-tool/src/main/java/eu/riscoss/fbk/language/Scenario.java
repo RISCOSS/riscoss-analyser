@@ -22,25 +22,21 @@ import java.util.HashMap;
 
 public class Scenario
 {
-	public static class PreferencePair
-	{
+	public static class PreferencePair {
 		public String	mostPreferred;
 		public String	lessPreferred;
 	}
 	
-	public static class Pair
-	{
+	public static class Pair {
 		public String	label;
 		public String	value;
 		
-		public Pair( String k, String v )
-		{
+		public Pair( String k, String v ) {
 			label = k;
 			value = v;
 		}
 		
-		public String toString()
-		{
+		public String toString() {
 			return "[" + label + "=" + value + "]";
 		}
 	}
@@ -55,35 +51,29 @@ public class Scenario
 	
 	static final ArrayList<Pair>		emptylist	= new ArrayList<Pair>();
 	
-	public Scenario( Model model )
-	{
+	public Scenario( Model model ) {
 		this.model = model;
 	}
 	
-	public void addConstraint( String id, String label )
-	{
+	public void addConstraint( String id, String label ) {
 		ArrayList<Pair> list = constraints.get( id );
-		if( list == null )
-		{
+		if( list == null ) {
 			list = new ArrayList<Pair>();
 			constraints.put( id, list );
 		}
 		list.add( new Pair( label, null ) );
 	}
 	
-	public void addConstraint( String id, String label, String value )
-	{
+	public void addConstraint( String id, String label, String value ) {
 		ArrayList<Pair> list = constraints.get( id );
-		if( list == null )
-		{
+		if( list == null ) {
 			list = new ArrayList<Pair>();
 			constraints.put( id, list );
 		}
 		list.add( new Pair( label, value ) );
 	}
 	
-	public void setConstraint( String id, String label, String value )
-	{
+	public void setConstraint( String id, String label, String value ) {
 		ArrayList<Pair> list = constraints.get( id );
 		if( list == null ) {
 			list = new ArrayList<Pair>();
@@ -133,8 +123,7 @@ public class Scenario
 		return preferences;
 	}
 	
-	public Iterable<String> keys()
-	{
+	public Iterable<String> keys() {
 		return constraints.keySet();
 	}
 	

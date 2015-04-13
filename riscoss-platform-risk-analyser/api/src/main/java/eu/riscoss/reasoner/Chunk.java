@@ -69,25 +69,30 @@ public class Chunk {
 		return address;
 	}
 	
-	String toUrl() {
-		return "addr=" + address + "id=" + id + "&stereotype=" + stereotype;
+	public String toUrl() {
+		return "addr=" + address + "&id=" + id + "&stereotype=" + stereotype;
 	}
 	
 	public String toString() {
 		return toUrl();
 	}
 	
-	public Chunk fromUrl( String url ) {
+	public static Chunk fromUrl( String url ) {
 		Map<String, String> query_pairs = new LinkedHashMap<String, String>();
-		try
-		{
+		try {
 			String[] pairs = url.split("&");
 			for (String pair : pairs) {
 				int idx = pair.indexOf("=");
-				query_pairs.put(URLDecoder.decode(pair.substring(0, idx), "UTF-8"), URLDecoder.decode(pair.substring(idx + 1), "UTF-8"));
+				if( idx < 0 ) continue;
+				query_pairs.put(
+						URLDecoder.decode(pair.substring(0, idx), "UTF-8"), 
+						URLDecoder.decode(pair.substring(idx + 1), "UTF-8") );
 			}
 			Chunk c = new Chunk( query_pairs.get( "id" ) );
-			c.stereotype = query_pairs.get( "stereotype" );
+			if( query_pairs.get( "stereotype" ) != null )
+				c.stereotype = query_pairs.get( "stereotype" );
+			if( query_pairs.get( "addr" ) != null )
+				c.address = new Address( query_pairs.get( "addr" ) );
 			return c;
 		}
 		catch( Exception ex )

@@ -74,6 +74,7 @@ public class IStarMLImporter {
 					for( String key : x.listAttributes() ) {
 						String value = x.getAttr( key );
 						if( "id".equals( value ) ) continue;
+						p.setProperty( key, value );
 					}
 				}
 			}

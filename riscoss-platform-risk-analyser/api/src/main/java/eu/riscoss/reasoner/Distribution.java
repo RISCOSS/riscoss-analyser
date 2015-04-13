@@ -18,6 +18,7 @@
 package eu.riscoss.reasoner;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -57,5 +58,31 @@ public class Distribution {
 		}
 		printDist += " ]";
 		return printDist;
+	}
+	
+	public String pack() {
+		String str = "";
+		String sep = "";
+		for( double val : values ) {
+			str += sep + val;
+			sep = ";";
+		}
+		return str;
+	}
+	
+	public static Distribution unpack( String value ) {
+		try {
+			String[] parts = value.split( "[;]" );
+			Double[] d = new Double[parts.length];
+			for( int i = 0; i < parts.length; i++ ) {
+				d[i] = Double.parseDouble( parts[i] );
+			}
+			Distribution dist = new Distribution();
+			dist.setValues( Arrays.asList( d ) );
+			return dist;
+		}
+		catch( Exception ex ) {
+			return null;
+		}
 	}
 }

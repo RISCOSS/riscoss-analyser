@@ -17,7 +17,6 @@
 
 package eu.riscoss.fbk.lp;
 
-
 import java.security.InvalidParameterException;
 import java.util.LinkedList;
 
@@ -94,7 +93,7 @@ public class Node {
 		setSatLabel(getSatLabel());
 	}
 	
-	void setDenLabel(Label aLabel) {
+	public void setDenLabel(Label aLabel) {
 		checkLabelConsistency(aLabel, getDenLabel());
 		// stores the current label in the old label field
 		oldDenLabel = denLabel;
