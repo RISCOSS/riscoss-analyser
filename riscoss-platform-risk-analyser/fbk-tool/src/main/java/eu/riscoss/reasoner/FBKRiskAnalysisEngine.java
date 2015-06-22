@@ -19,22 +19,14 @@ package eu.riscoss.reasoner;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import eu.riscoss.fbk.io.RiscossLoader;
 import eu.riscoss.fbk.language.Program;
 import eu.riscoss.fbk.language.Proposition;
 import eu.riscoss.fbk.language.Relation;
-import eu.riscoss.fbk.lp.FunctionsLibrary;
 import eu.riscoss.fbk.lp.JsExtension;
-import eu.riscoss.reasoner.AnalysisResponse;
-import eu.riscoss.reasoner.Chunk;
-import eu.riscoss.reasoner.DataType;
-import eu.riscoss.reasoner.Evidence;
-import eu.riscoss.reasoner.Field;
-import eu.riscoss.reasoner.FieldType;
-import eu.riscoss.reasoner.ModelSlice;
-import eu.riscoss.reasoner.RiskAnalysisEngine;
 
 public class FBKRiskAnalysisEngine implements RiskAnalysisEngine
 {
@@ -194,7 +186,224 @@ public class FBKRiskAnalysisEngine implements RiskAnalysisEngine
 		
 		analysis = new RiskEvaluation();
 		
-		JsExtension.get().put( "fx", FunctionsLibrary.get() );
+		analysis.setProgram( program );
+		analysis.initCode();
+		
+		program.getScenario().setConstraint( "always", "st", "1.0" );
+		
+		for( Proposition p : program.getModel().propositions() ) {
+			
+			if( p.getProperty( "default-value", null ) != null ) {
+				try {
+					double d = Double.parseDouble( p.getProperty( "default-value", null ) );
+					program.getScenario().setConstraint( p.getId(), "st", "" + d );
+				}
+				catch( Exception ex ) {
+					ex.printStackTrace();
+				}
+			}
+			
+			if( p.getProperty( "input", "false" ).equalsIgnoreCase( "false" ) ) continue;
+			
+			List<String> list = program.getScenario().constraintsOf( p.getId(), "st" );
+			if( list == null ) continue;
+			
+			if( list.size() < 2 ) continue;
+			
+			String datatype = p.getProperty( "datatype", null );
+			if( datatype == null ) datatype = DataType.EVIDENCE.name();
+			if( datatype != null ) {
+				DataType dt = DataType.valueOf( datatype.toUpperCase() );
+				switch( dt ) {
+				case EVIDENCE:{
+					
+					ArrayList<Evidence> values = new ArrayList<>();
+					for( int i = 0; i < list.size(); i++ ) {
+						double pos = 0;
+						double neg = 0;
+						try { 
+							pos = Double.parseDouble( program.getScenario().getConstraint( p.getId(), "st", i ) );
+						} catch( Exception ex ) {}
+						try { 
+							neg = Double.parseDouble( program.getScenario().getConstraint( p.getId(), "sf", i ) );
+						} catch( Exception ex ) {}
+						Evidence e = new Evidence( pos, neg );
+						values.add( e );
+					}
+					
+					
+					if( p.getProperty( "unifier", null ) == null ) {
+						// calculate a default unification
+						
+						double pos = 0, neg = 0;
+						
+						for( Evidence e : values ) {
+							pos += e.getPositive();
+							neg += e.getNegative();
+						}
+						
+						pos = pos / values.size();
+						neg = neg / values.size();
+						
+						program.getScenario().removeConstraint( p.getId(), "st" );
+						program.getScenario().removeConstraint( p.getId(), "sf" );
+						program.getScenario().setConstraint( p.getId(), "st", "" + pos );
+						program.getScenario().setConstraint( p.getId(), "sf", "" + neg );
+						
+					}
+					else {
+						try {
+							JsExtension.get().put( "values", values );
+							
+							String code = "x=" + p.getProperty( "unifier", "x" ) + ";";
+							
+							Evidence e = (Evidence)JsExtension.get().eval(code);
+							
+							program.getScenario().removeConstraint( p.getId(), "st" );
+							program.getScenario().removeConstraint( p.getId(), "sf" );
+							program.getScenario().setConstraint( p.getId(), "st", "" + e.getPositive() );
+							program.getScenario().setConstraint( p.getId(), "sf", "" + e.getNegative() );
+							
+						} catch (Exception ex) {
+							ex.printStackTrace();
+						}
+					}
+				}
+				break;
+				case REAL: {
+					
+					ArrayList<Double> values = new ArrayList<>();
+					for( int i = 0; i < list.size(); i++ ) {
+						double pos = 0;
+						try { 
+							pos = Double.parseDouble( program.getScenario().getConstraint( p.getId(), "st", i ) );
+						} catch( Exception ex ) {}
+						values.add( pos );
+					}
+					
+					
+					if( p.getProperty( "unifier", null ) == null ) {
+						// calculate a default unification
+						
+						double pos = 0;
+						
+						for( Double e : values ) {
+							pos += e;
+						}
+						
+						pos = pos / values.size();
+						
+						program.getScenario().removeConstraint( p.getId(), "st" );
+						program.getScenario().setConstraint( p.getId(), "st", "" + pos );
+						
+					}
+					else {
+						try {
+							JsExtension.get().put( "values", values );
+							
+							String code = "x=" + p.getProperty( "unifier", "x" ) + ";";
+							
+							Double e = (Double)JsExtension.get().eval(code);
+							
+							program.getScenario().removeConstraint( p.getId(), "st" );
+							program.getScenario().setConstraint( p.getId(), "st", "" + e );
+							
+						} catch (Exception ex) {
+							ex.printStackTrace();
+						}
+					}
+				}
+				break;
+				case INTEGER: {
+					
+					ArrayList<Integer> values = new ArrayList<>();
+					for( int i = 0; i < list.size(); i++ ) {
+						int pos = 0;
+						try { 
+							pos = (int)Double.parseDouble( program.getScenario().getConstraint( p.getId(), "st", i ) );
+						} catch( Exception ex ) {}
+						values.add( pos );
+					}
+					
+					
+					if( p.getProperty( "unifier", null ) == null ) {
+						// calculate a default unification
+						
+						double pos = 0;
+						
+						for( Integer e : values ) {
+							pos += e;
+						}
+						
+						program.getScenario().removeConstraint( p.getId(), "st" );
+						program.getScenario().setConstraint( p.getId(), "st", "" + pos );
+						
+					}
+					else {
+						try {
+							JsExtension.get().put( "values", values );
+							
+							String code = "x=" + p.getProperty( "unifier", "x" ) + ";";
+							
+							Integer e = (Integer)JsExtension.get().eval(code);
+							
+							program.getScenario().removeConstraint( p.getId(), "st" );
+							program.getScenario().setConstraint( p.getId(), "st", "" + e );
+							
+						} catch (Exception ex) {
+							ex.printStackTrace();
+						}
+					}
+				}
+				break;
+				case STRING:
+//				{
+//					String pos = program.getScenario().getConstraint( chunk.getId(), "st" );
+//					if( pos == null ) pos = "";
+//					return new Field( DataType.STRING, pos );
+//				}
+				case DISTRIBUTION:
+				case NaN:
+				default:
+					// We do not support the DISTRIBUTION case
+//					throw new RuntimeException( "Unsupported data type: " + dt.toString() );
+				}
+			}
+			else {
+//				double pos = 0;
+//				double neg = 0;
+//				try { 
+//					pos = Double.parseDouble( program.getScenario().getConstraint( chunk.getId(), "st" ) );
+//				} catch( Exception ex ) {}
+//				try { 
+//					neg = Double.parseDouble( program.getScenario().getConstraint( chunk.getId(), "sf" ) );
+//				} catch( Exception ex ) {}
+//				return new Field( DataType.EVIDENCE, new Evidence( pos, neg ) );
+			}
+			
+//			Collection<Pair> pairs = program.getScenario().constraintsOf( p.getId() );
+//			if( pairs == null ) continue;
+//			if( pairs.size() < 2 ) continue;
+//			if( p.getProperty( "unifier", null ) == null ) {
+//				// calculate a default unification
+//			}
+//			else {
+//				try {
+//					ArrayList<String> values = new ArrayList<String>();
+//					for( Pair pair : pairs ) values.add( pair.value );
+//					JsExtension.get().put( "values", values );
+//					String code = "x=" + p.getProperty( "unifier", "x" ) + ";";
+//					
+//					String unified = JsExtension.get().eval(code).toString();
+//					
+//					program.getScenario().removeConstraint( p.getId(), "st" );
+//					program.getScenario().setConstraint( p.getId(), "st", unified );
+//					
+//				} catch (Exception ex) {
+//					ex.printStackTrace();
+//				}
+//			}
+		}
 		
 		analysis.run(program);
 		
@@ -264,6 +473,27 @@ public class FBKRiskAnalysisEngine implements RiskAnalysisEngine
 		case OUTPUT_VALUE:
 			if( analysis == null ) {
 				return new Field( DataType.EVIDENCE, new Evidence( 0, 0 ) );
+			}
+			{
+			Proposition p = program.getModel().getProposition( chunk.getId() );
+			if( p == null ) return null;
+				if( p.getProperty( "datatype", DataType.EVIDENCE.name() ) != null ) {
+					DataType dt = DataType.valueOf( p.getProperty( "datatype", DataType.EVIDENCE.name() ).toUpperCase() );
+					switch( dt ) {
+					case EVIDENCE:
+						return new Field( DataType.EVIDENCE, new Evidence( 
+								analysis.getPositiveValue( chunk.getId() ), 
+								analysis.getNegativeValue( chunk.getId() ) ) );
+					case INTEGER:
+						return new Field( DataType.INTEGER, 
+								(int) analysis.getPositiveValue( chunk.getId() ) );
+					case REAL:
+						return new Field( DataType.REAL, 
+								(double) analysis.getPositiveValue( chunk.getId() ) );
+						default:
+							return null;
+					}
+				}
 			}
 			return new Field( DataType.EVIDENCE, new Evidence( 
 					analysis.getPositiveValue( chunk.getId() ), 
@@ -360,14 +590,21 @@ public class FBKRiskAnalysisEngine implements RiskAnalysisEngine
 				program.getScenario().setConstraint( chunk.getId(), "st", (String)f.getValue() );
 				break;
 			case REAL:
-				program.getScenario().setConstraint( chunk.getId(), "st", "" + (Double)f.getValue() );
+				// single->multi
+//				program.getScenario().setConstraint( chunk.getId(), "st", "" + (Double)f.getValue() );
+				program.getScenario().addConstraint( chunk.getId(), "st", "" + (Double)f.getValue() );
 				break;
 			case INTEGER:
-				program.getScenario().removeConstraint( chunk.getId(), "st" );
-				program.getScenario().setConstraint( chunk.getId(), "st", "" + (Integer)f.getValue() );
+				// single->multi
+//				program.getScenario().removeConstraint( chunk.getId(), "st" );
+//				program.getScenario().setConstraint( chunk.getId(), "st", "" + (Integer)f.getValue() );
+				program.getScenario().addConstraint( chunk.getId(), "st", "" + (Integer)f.getValue() );
 				break;
 			case EVIDENCE:
-				program.getScenario().setConstraint( chunk.getId(), "st", "" + ((Evidence)f.getValue()).getPositive() );
+				// single->multi
+//				program.getScenario().setConstraint( chunk.getId(), "st", "" + ((Evidence)f.getValue()).getPositive() );
+//				program.getScenario().addConstraint( chunk.getId(), "sf", "" + ((Evidence)f.getValue()).getNegative() );
+				program.getScenario().addConstraint( chunk.getId(), "st", "" + ((Evidence)f.getValue()).getPositive() );
 				program.getScenario().addConstraint( chunk.getId(), "sf", "" + ((Evidence)f.getValue()).getNegative() );
 				break;
 			default:
@@ -389,5 +626,10 @@ public class FBKRiskAnalysisEngine implements RiskAnalysisEngine
 		
 		default:break;
 		}
+	}
+
+	@Override
+	public void resetFields() {
+		program.getScenario().clear();
 	}
 }

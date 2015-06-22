@@ -18,39 +18,49 @@
 package eu.riscoss.fbk.lp;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 import eu.riscoss.reasoner.Evidence;
 
-public class Relation
+public class Edge
 {
 	private Solver satSolver;
 	private Solver denSolver;
 
 	private Node				target;				// target node for this relation
-	private LinkedList<Node>	sources;			// source nodes for this relation
+	private Map<String,Node>	sources		= new HashMap<String,Node>();
+	private List<Node>			nodes		= new ArrayList<Node>();			// source nodes for this relation
 	private float				weight		= 1;
 	private String				mnemonic	= "" + this.hashCode();
 	
 	private String				js = null;
 	
 	
-	public Relation() {
+	public Edge() {
 		this( null );
 	}
 
-	public Relation( Solver solver ) {
-		this( solver, null, new LinkedList<Node>() );
-	}
-	
-	public Relation( Solver solver, Node theTarget, LinkedList<Node> theSources ) {
+	public Edge( Solver solver ) {
+
 		satSolver = solver;
 		denSolver = new Solver.AndSolver( true );
 		
-		target	= theTarget;
-		sources	= theSources;
+		target	= null;
+	
 	}
+	
+	// Unused
+//	public Edge( Solver solver, Node theTarget, LinkedList<Node> theSources ) {
+//		satSolver = solver;
+//		denSolver = new Solver.AndSolver( true );
+//		
+//		target	= theTarget;
+//		sources	= theSources;
+//	}
 	
 	@SuppressWarnings("unused")
 	private static LinkedList<Node> mkLinkedList( Node aNode ) {
@@ -59,11 +69,11 @@ public class Relation
 		return aList;
 	}
 	
-	Label solveForS() {
+	public Label solveForS() {
 		return satSolver.solve( this );
 	}
 	
-	Label solveForD() {
+	public Label solveForD() {
 		return denSolver.solve( this );
 	}
 	
@@ -71,30 +81,33 @@ public class Relation
 		return target;
 	}
 	
-	public LinkedList<Node> getSources() {
-		return sources;
+	public List<Node> getSources() {
+		return nodes;
 	}
 	
 	public void setTargetNode(Node aNode) {
 		target = aNode;
 	}
 	
-	public void setSourceNodes( LinkedList<Node> theChildren ) {
-		sources = theChildren;
-	}
-	
 	public void addSourceNode(Node aNode) {
-		sources.add(aNode);
+		sources.put( aNode.getName(), aNode );
+		nodes.add(aNode);
 	}
 	
-	public void addChildrenNodes( LinkedList<Node> additionalChildren ) {
-		sources.addAll( additionalChildren );
-	}
+	// Unused
+//	public void setSourceNodes( LinkedList<Node> theChildren ) {
+//		sources = theChildren;
+//	}
+	
+	// Unused
+//	public void addChildrenNodes( LinkedList<Node> additionalChildren ) {
+//		sources.addAll( additionalChildren );
+//	}
 	
 	public void informNodes() {
 		target.addIncomingRelation(this);
 		
-		for( Node node : sources )
+		for( Node node : nodes )
 			node.addOutgoingRelation( this );
 	}
 
@@ -131,11 +144,10 @@ public class Relation
 		if( js != null ) {
 			try {
 				Evidence e = new Evidence( 0, 0 );
-				JsExtension.get().set( "evidence", e );
-				String code = "";
+//				JsExtension.get().set( "evidence", e );
 				JsExtension.get().put( "nodes", getSources() );
 				JsExtension.get().put( "sources", toArray( getSources() ) );
-				code += "e=" + js;
+				String code = "e=" + js;
 				try {
 					e = (Evidence)JsExtension.get().eval( code );
 				}
@@ -165,7 +177,7 @@ public class Relation
 		}
 	}
 	
-	List<Evidence> toArray( List<Node> nodes ) {
+	List<Evidence> toArray( Collection<Node> nodes ) {
 		List<Evidence> list = new ArrayList<>();
 		for( Node node : nodes ) {
 			list.add( new Evidence( node.getOldSatLabel().getValue(), node.getOldDenLabel().getValue() ) );
@@ -173,7 +185,7 @@ public class Relation
 		return list;
 	}
 	
-	String srcSatArray( Relation r ) {
+	String srcSatArray( Edge r ) {
 		String ret = "";
 		String sep = "";
 		for( Node n : r.getSources() ) {
@@ -183,7 +195,7 @@ public class Relation
 		return ret;
 	}
 	
-	String srcDenArray( Relation r ) {
+	String srcDenArray( Edge r ) {
 		String ret = "";
 		String sep = "";
 		for( Node n : r.getSources() ) {
@@ -195,5 +207,13 @@ public class Relation
 
 	public void setJs( String code ) {
 		this.js = code;
+	}
+
+	public String getCode() {
+		return this.js;
+	}
+	
+	public Node getSource( String name ) {
+		return sources.get( name );
 	}
 }

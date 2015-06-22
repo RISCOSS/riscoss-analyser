@@ -13,32 +13,28 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 
-*/
+ */
 
 package eu.riscoss.fbk.lp;
-
 
 import java.util.HashMap;
 
 import eu.riscoss.fbk.language.Proposition;
 
-public class Chunk
-{
+public class Chunk {
+	
 	Proposition				proposition;
 	HashMap<String,Node>	predicates = new HashMap<String,Node>();
-
-	public Iterable<String> predicates()
-	{
+	
+	public Iterable<String> predicates() {
 		return predicates.keySet();
 	}
 	
-	public Node getPredicate( String id )
-	{
+	public Node getPredicate( String id ) {
 		return predicates.get( id );
 	}
-
-	public Proposition getProposition()
-	{
+	
+	public Proposition getProposition() {
 		return proposition;
 	}
 }

@@ -68,4 +68,10 @@ public interface RiskAnalysisStructure {
 	 */
 	public abstract String				getLastMessage();
 	
+	/**
+	 * Clear the values of the input fields
+	 * (and resets to length of the array in case of multiple values)
+	 */
+	public abstract void				resetFields();
+	
 }

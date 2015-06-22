@@ -99,6 +99,9 @@ public class IStarMLImporter {
 					type = "";
 				Relation r = new Relation( type );
 				r.setTarget( model.getProposition( xml.getAttr( "id", xml.getAttr( "name" ) ) ) );
+				if( x.getAttr( "operator", null ) != null ) {
+					r.setOperator( x.getAttr( "operator", "and" ) );
+				}
 				
 				for( XmlNode child : x.getChildren( "ielement" ) ) {
 //					if( model.getProposition( child.getAttr( "id", child.getAttr( "iref", child.getAttr( "name", null ) ) ) ) == null )

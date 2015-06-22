@@ -104,8 +104,14 @@ public class Relation implements Cloneable
 			properties.remove( name );
 		else if( "".equals( value ) )
 			properties.remove( name );
-		else
-			properties.put( name, value );
+		else {
+			if( "operator".equals( name ) ) {
+				setOperator( value );
+			}
+			else {
+				properties.put( name, value );
+			}
+		}
 	}
 
 	public void setTarget( Proposition p )
@@ -233,11 +239,25 @@ public class Relation implements Cloneable
 		return getStereotype() + "( " + sources + " -> " + target + " ) ";
 	}
 	
+	@Deprecated
 	public void setOperator( int op )
 	{
 		this.operator = op;
 	}
 	
+	public void setOperator( String op ) {
+		if( "and".equalsIgnoreCase( op ) ) {
+			setProperty( "function", "fx.join.and(sources)" );
+		}
+		else if( "or".equalsIgnoreCase( op ) ) {
+			setProperty( "function", "fx.join.or(sources)" );
+		}
+		else if( "avg".equalsIgnoreCase( op ) ) {
+			setProperty( "function", "fx.join.avg(sources)" );
+		}
+	}
+	
+	@Deprecated
 	public int getOperator()
 	{
 		return this.operator;

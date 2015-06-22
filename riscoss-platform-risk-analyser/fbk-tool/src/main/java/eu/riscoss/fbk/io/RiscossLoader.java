@@ -87,17 +87,6 @@ public class RiscossLoader {
 //				program.getModel().addRelation( r );
 			}
 		}
-		for( Proposition p : program.getModel().propositions( "indicator" ) ) {
-			if( p.getProperty( "default-value", null ) != null ) {
-				try {
-					double d = Double.parseDouble( p.getProperty( "default-value", null ) );
-					program.getScenario().setConstraint( p.getId(), "st", "" + d );
-				}
-				catch( Exception ex ) {
-					ex.printStackTrace();
-				}
-			}
-		}
 	}
 	
 	private Model iStarML2Model(String istarml) {

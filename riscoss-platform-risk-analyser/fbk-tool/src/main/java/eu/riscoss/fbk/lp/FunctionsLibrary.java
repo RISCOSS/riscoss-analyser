@@ -76,13 +76,110 @@ public class FunctionsLibrary {
 			return list;
 		}
 		
-		public List<Evidence> range( List<Evidence> list, double min, double max ) {
+		public List<Evidence> range_both( List<Evidence> list, double min, double max ) {
 			for( Evidence e : list ) {
 				e.set(
 						(2 - e.getPositive()) /4,
 						1- ((2 - e.getPositive()) /4)
-//						(e.getPositive() - 2) /4
 						);
+			}
+			return list;
+		}
+		
+		public List<Evidence> range2( List<Evidence> list, double min, double max ) {
+			return range( list, min, max );
+		}
+		
+		public List<Evidence> range( List<Evidence> list, double min, double max ) {
+			if( min > max ) {
+				return range_inv( list, max, min );
+			}
+			for( Evidence e : list ) {
+				// normalize to 0 - newmax;
+				max = max - min;
+				min = min - min;
+				e.set( e.getPositive() / max, 0 );
+			}
+			return list;
+		}
+		
+		List<Evidence> range_inv( List<Evidence> list, double min, double max ) {
+			for( Evidence e : list ) {
+				// normalize to 0 - newmax;
+				max = max - min;
+				min = min - min;
+				e.set( (max - e.getPositive()) / max, 0 );
+			}
+			return list;
+		}
+		
+		public List<Evidence> thresholds( List<Evidence> list, List<Double> ths ) {
+			if( ths.size() == 2 ) return range( list, ths.get( 0 ), ths.get( 1 ) );
+			for( Evidence e : list ) {
+				for( int i = 1; i < ths.size(); i++ ) {
+//					if( (e.getPositive() >= ths.get( i -1)) & (e.getPositive() <= ths.get( i ) ) ) {
+					if( in_range( e.getPositive(), ths.get( i -1), ths.get( i ) ) ) {
+						e.set( ((double)i -(double)1) / ((double)ths.size() -(double)2), e.getNegative() );
+						continue;
+					}
+				}
+			}
+			return list;
+		}
+		
+		boolean in_range( double val, double v1, double v2 ) {
+			if( v1 <= v2 ) {
+				return (val >= v1) & (val <= v2);
+			}
+			else {
+				return (val >= v2) & (val <= v1);
+			}
+		}
+		
+		public List<Evidence> lt( List<Evidence> list, double threshold ) {
+			for( Evidence e : list ) {
+				if( e.getPositive() < threshold ) {
+					e.set( 1, e.getNegative() );
+				}
+				else {
+					e.set( 0,  e.getNegative() );
+				}
+			}
+			return list;
+		}
+		
+		public List<Evidence> gt( List<Evidence> list, double threshold ) {
+			for( Evidence e : list ) {
+				if( e.getPositive() > threshold ) {
+					e.set( 1, e.getNegative() );
+				}
+				else {
+					e.set( 0,  e.getNegative() );
+				}
+			}
+			return list;
+		}
+		
+		public List<Evidence> le( List<Evidence> list, double threshold ) {
+			for( Evidence e : list ) {
+				if( e.getPositive() <= threshold ) {
+					e.set( 1, e.getNegative() );
+				}
+				else {
+					e.set( 0,  e.getNegative() );
+				}
+			}
+			return list;
+		}
+		
+		public List<Evidence> ge( List<Evidence> list, double threshold ) {
+			for( Evidence e : list ) {
+				if( e.getPositive() >= threshold ) {
+					e.set( 1, e.getNegative() );
+				}
+				else {
+					e.set( 0,  e.getNegative() );
+				}
 			}
 			return list;
 		}

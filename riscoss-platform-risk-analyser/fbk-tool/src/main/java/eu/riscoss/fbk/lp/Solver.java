@@ -19,21 +19,17 @@ package eu.riscoss.fbk.lp;
 
 import java.util.LinkedList;
 
-public abstract class Solver
-{
-	public static final class AndSolver extends Solver
-	{
-		public AndSolver( boolean param )
-		{
+public abstract class Solver {
+	
+	public static final class AndSolver extends Solver {
+		public AndSolver( boolean param ) {
 			super( param );
 		}
 		
-		public Label solve( Relation rel )
-		{
+		public Label solve( Edge rel ) {
 			Label productLabel = Label.TOTAL;
 			
-			for( Node node : rel.getSources() )
-			{
+			for( Node node : rel.getSources() ) {
 				Label tempLabel = getOldLabel( node );
 				productLabel = product( productLabel, tempLabel );
 			}
@@ -49,7 +45,7 @@ public abstract class Solver
 			super( param );
 		}
 		
-		public Label solve( Relation rel )
+		public Label solve( Edge rel )
 		{
 			Label sumLabel = Label.NO;
 			
@@ -69,7 +65,7 @@ public abstract class Solver
 			super( param );
 		}
 		
-		public Label solve( Relation rel )
+		public Label solve( Edge rel )
 		{
 			return new Label( Label.NO.getValue() );
 		}
@@ -82,7 +78,7 @@ public abstract class Solver
 			super( param );
 		}
 		
-		public Label solve( Relation rel )
+		public Label solve( Edge rel )
 		{
 			Label sumLabel = Label.NO;
 			
@@ -103,7 +99,7 @@ public abstract class Solver
 			super( param );
 		}
 		
-		public Label solve( Relation rel )
+		public Label solve( Edge rel )
 		{
 			for( Node node : rel.getSources() )
 			{
@@ -122,7 +118,7 @@ public abstract class Solver
 		negative = param;
 	}
 	
-	public abstract Label solve( Relation rel );
+	public abstract Label solve( Edge rel );
 	
 	void mustHaveExactlyOneSource( LinkedList<Node> childNodes )
 	{

@@ -20,24 +20,29 @@ package eu.riscoss.fbk.lp;
 import java.security.InvalidParameterException;
 import java.util.LinkedList;
 
+import eu.riscoss.reasoner.Evidence;
+
 public class Node {
 	private Label satLabel;      // node label for the satisfaction
 	private Label denLabel;      // node label for the negation
 	private Label oldSatLabel;   // doubled values for safe propagation
 	private Label oldDenLabel;   // doubled values for safe propagation
-	private LinkedList<Relation> in;  // list of  rels. where this node is parent
-	private LinkedList<Relation> out;   // list of rels. where this node is child
+	private LinkedList<Edge> in;  // list of  rels. where this node is parent
+	private LinkedList<Edge> out;   // list of rels. where this node is child
+	
+	private double object = Double.NaN;
+	private String name;
 	
 	
 	public Node(Label aSatLabel, Label aDenLabel) {
 		initSatLabel(aSatLabel);
 		initDenLabel(aDenLabel);
-		in = new LinkedList<Relation>();
-		out  = new LinkedList<Relation>();
+		in = new LinkedList<Edge>();
+		out  = new LinkedList<Edge>();
 	};
 	
 	
-	boolean hasChanged() {
+	public boolean hasChanged() {
 		if (getSatLabel().isEqualTo(getOldSatLabel()) &&
 				getDenLabel().isEqualTo(getOldDenLabel()))
 			return false;
@@ -45,7 +50,7 @@ public class Node {
 			return true;
 	}
 	
-	void syncLabels() {
+	public void syncLabels() {
 		syncSatLabel();
 		syncDenLabel();
 	}
@@ -54,7 +59,7 @@ public class Node {
 		return satLabel;
 	}
 	
-	Label getOldSatLabel() {
+	public Label getOldSatLabel() {
 		return oldSatLabel;
 	}
 	
@@ -62,7 +67,7 @@ public class Node {
 		return denLabel;
 	}
 	
-	Label getOldDenLabel() {
+	public Label getOldDenLabel() {
 		return oldDenLabel;
 	}
 	
@@ -110,15 +115,15 @@ public class Node {
 		setDenLabel( getDenLabel() );
 	}
 	
-	void addIncomingRelation( Relation r ) {
+	void addIncomingRelation( Edge r ) {
 		in.add( r );
 	}
 	
-	void addOutgoingRelation( Relation r ) {
+	void addOutgoingRelation( Edge r ) {
 		out.add( r );
 	}
 	
-	LinkedList<Relation> getIncomingRelations() {
+	public LinkedList<Edge> in() {
 		return in;
 	}
 	
@@ -129,4 +134,31 @@ public class Node {
 	public float getDenial() {
 		return getDenLabel().getValue();
 	}
+	
+	public Evidence getEvidence() {
+		return new Evidence( satLabel.getValue(), denLabel.getValue() );
+	}
+	
+	public void setEvidence( Evidence e ) {
+		setSatLabel( new Label( (float) e.getPositive() ) );
+		setDenLabel( new Label( (float) e.getNegative() ) );
+	}
+	
+	public void setUserObject( double object ) {
+		this.object = object;
+	}
+	
+	public Double getUserObject() {
+		return this.object;
+	}
+
+
+	public void setName( String id ) {
+		this.name = id;
+	}
+	
+	public String getName() {
+		return this.name;
+	}
+	
 }

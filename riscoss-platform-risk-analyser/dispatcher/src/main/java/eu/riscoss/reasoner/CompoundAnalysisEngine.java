@@ -62,6 +62,9 @@ public class CompoundAnalysisEngine implements RiskAnalysisEngine {
 		} catch (IllegalAccessException e) {
 			e.printStackTrace();
 		}
+		catch( Throwable t ) {
+			t.printStackTrace();
+		}
 	}
 	
 	public void addEngine( RiskAnalysisEngine engine ) {
@@ -89,6 +92,9 @@ public class CompoundAnalysisEngine implements RiskAnalysisEngine {
 			}
 			catch( Exception ex ) {
 			
+			}
+			catch( Error err ) {
+				System.out.println( "Error catch" );
 			}
 		}
 	}
@@ -217,6 +223,21 @@ public class CompoundAnalysisEngine implements RiskAnalysisEngine {
 				first.runAnalysis( args );
 		
 		return AnalysisResponse.DONE;
+	}
+
+	@Override
+	public void resetFields() {
+		for( RiskAnalysisEngine engine : engines.values() ) {
+			try {
+				engine.resetFields();
+			}
+			catch( Exception ex ) {
+			
+			}
+			catch( Error err ) {
+				System.out.println( "Error catch" );
+			}
+		}
 	}
 	
 }

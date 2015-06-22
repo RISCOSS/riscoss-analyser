@@ -13,23 +13,23 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 
-*/
+ */
 
 package eu.riscoss.reasoner;
 
 import java.io.PrintStream;
-import java.util.Iterator;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 import javax.script.ScriptException;
 
-import eu.riscoss.fbk.language.Analysis;
 import eu.riscoss.fbk.language.Program;
 import eu.riscoss.fbk.language.Proposition;
 import eu.riscoss.fbk.language.Relation;
-import eu.riscoss.fbk.language.Result;
 import eu.riscoss.fbk.language.Scenario.Pair;
-import eu.riscoss.fbk.language.Solution;
 import eu.riscoss.fbk.lp.Chunk;
+import eu.riscoss.fbk.lp.Edge;
 import eu.riscoss.fbk.lp.FunctionsLibrary;
 import eu.riscoss.fbk.lp.JsExtension;
 import eu.riscoss.fbk.lp.LPKB;
@@ -40,15 +40,17 @@ import eu.riscoss.fbk.semantics.Axiom;
 import eu.riscoss.fbk.semantics.Condition;
 import eu.riscoss.fbk.semantics.Rule;
 import eu.riscoss.fbk.semantics.Semantics;
-import eu.riscoss.reasoner.Evidence;
 
-public class RiskEvaluation implements Iterable<Solution>, Analysis
+public class RiskEvaluation 
 {
-	Program program;
+	Program			program;
 	
-	public LPKB kb = new LPKB();
+	public LPKB		kb = new LPKB();
 	
-	Semantics semantics = new RiskSemantics();
+	Semantics		semantics = new RiskSemantics();
+	
+	boolean			codeLoaded = false;
+	
 	
 	public RiskEvaluation() {
 	}
@@ -57,12 +59,12 @@ public class RiskEvaluation implements Iterable<Solution>, Analysis
 		this.program = program;
 	}
 	
-	public void run(Program program) {
+	public void initCode() {
+		
+		if( program == null ) return;
 		
 		JsExtension.get().put( "fx", FunctionsLibrary.get() );
 		JsExtension.get().put( "program", program );
-		
-		setProgram(program);
 		
 		try {
 			JsExtension.get().eval( program.getOptions().getValue( "code", "" ) );
@@ -70,9 +72,117 @@ public class RiskEvaluation implements Iterable<Solution>, Analysis
 			e.printStackTrace();
 		}
 		
+		codeLoaded = true;
+	}
+	
+	public void run( Program program ) {
+		
+		if( program != this.program ) {
+			setProgram( program );
+		}
+		
+		initCode();
+		
 		kb = mkgraph();
 		
-		kb.getGraph().propagate();
+		propagate( kb );
+		
+		//		kb.getGraph().propagate();
+		
+		codeLoaded = false;
+	}
+	
+	public void propagate( LPKB kb ) {
+		
+		boolean graphChanged;
+		
+		do {
+			for( Node node : kb.nodes() ) {
+				node.syncLabels();
+			}
+			
+			graphChanged = false;
+			
+			for( Node node : kb.nodes() ) {
+				
+				if (node.in().isEmpty()) continue;
+				
+				for( Edge edge : node.in() ) {
+					
+					if( edge.getCode() != null ) {
+						try {
+							Evidence e = null; //new Evidence( 0, 0 );
+							JsExtension.get().put( "nodes", edge.getSources() );
+							JsExtension.get().put( "target", edge.getTarget() );
+							JsExtension.get().put( "relation", edge );
+							JsExtension.get().put( "sources", getEvidenceList( edge.getSources() ) );
+							String code = "e=" + edge.getCode();
+							try {
+								e = (Evidence)JsExtension.get().eval( code );
+							}
+							catch( ClassCastException ex ) {}
+							
+							if( e == null ) {
+								
+								if( !Double.isNaN( edge.getTarget().getUserObject() ) ) {
+									
+									if( edge.getTarget().getSatisfaction() != edge.getTarget().getUserObject().floatValue() ) {
+										
+//										System.out.println( 
+//												edge.getTarget().getSatisfaction() + " != " +
+//												edge.getTarget().getUserObject().floatValue() );
+										
+										edge.getTarget().setSatLabel( new Label( edge.getTarget().getUserObject().floatValue(), false ) );
+										
+										graphChanged = true;
+									}
+								}
+								continue;
+							}
+							
+							Label sat = new Label( (float)e.getPositive() * edge.getWeight() );
+							Label den = new Label( (float)e.getNegative() * edge.getWeight() );
+							
+							if( sat.isGreaterThan( edge.getTarget().getSatLabel() ) ) {
+								edge.getTarget().setSatLabel( sat );
+								graphChanged = true;
+							}
+							if( den.isGreaterThan( edge.getTarget().getDenLabel() ) ) {
+								edge.getTarget().setDenLabel( den );
+								graphChanged = true;
+							}
+							
+						}
+						catch (Exception ex) {
+							ex.printStackTrace();
+						}
+					}
+					else {
+						Label sat = edge.solveForS();
+						Label den = edge.solveForD();
+						
+						if( sat.isGreaterThan( edge.getTarget().getSatLabel() ) ) {
+							graphChanged = true;
+							edge.getTarget().setSatLabel( sat );
+						}
+						if( den.isGreaterThan( edge.getTarget().getDenLabel() ) ) {
+							graphChanged = true;
+							edge.getTarget().setDenLabel( den );
+						}
+					}
+				}
+			}
+			
+		}
+		while (graphChanged == true);
+	}
+	
+	List<Evidence> getEvidenceList( Collection<Node> nodes ) {
+		List<Evidence> list = new ArrayList<>();
+		for( Node node : nodes ) {
+			list.add( new Evidence( node.getOldSatLabel().getValue(), node.getOldDenLabel().getValue() ) );
+		}
+		return list;
 	}
 	
 	LPKB mkgraph() {
@@ -83,7 +193,7 @@ public class RiskEvaluation implements Iterable<Solution>, Analysis
 				if (semantics.getAxiomCount(type) > 0) {
 					for (Axiom a : semantics.axioms(type)) {
 						
-						eu.riscoss.fbk.lp.Relation r_comb = new eu.riscoss.fbk.lp.Relation();
+						eu.riscoss.fbk.lp.Edge r_comb = new eu.riscoss.fbk.lp.Edge();
 						
 						switch( a.getPropagationType() ) {
 						case SAT_SAT:
@@ -157,6 +267,7 @@ public class RiskEvaluation implements Iterable<Solution>, Analysis
 					}
 					
 					node.setSatLabel(new Label(value, false));
+					node.setUserObject( value );
 				}
 			}
 		}
@@ -173,7 +284,7 @@ public class RiskEvaluation implements Iterable<Solution>, Analysis
 					
 					w = Math.abs( w );
 					
-					eu.riscoss.fbk.lp.Relation rel = new eu.riscoss.fbk.lp.Relation();
+					eu.riscoss.fbk.lp.Edge rel = new eu.riscoss.fbk.lp.Edge();
 					
 					rel.setWeight( w );
 					
@@ -256,52 +367,49 @@ public class RiskEvaluation implements Iterable<Solution>, Analysis
 		}
 	}
 	
-	class SolutionIterator implements Iterator<Solution> {
-		boolean done = false;
-		
-		@Override
-		public boolean hasNext()
-		{
-			return done == false;
-		}
-		
-		@Override
-		public Solution next()
-		{
-			
-			Solution sol = new Solution();
-			
-			for (Proposition p : program.getModel().propositions()) {
-				Chunk c = kb.index().getChunk(p.getId());
-				
-				if (c != null) {
-					for (String pred : c.predicates()) {
-						Node node = c.getPredicate(pred);
-						sol.addValue(
-								c.getProposition().getProperty("name",
-										c.getProposition().getId()),
-										//                                        c.getProposition().getProperty("label", c.getProposition().getId())),
-										pred,
-										"" + ((Label) node.getSatLabel()).getValue());
-						sol.addValue(
-								"-" + c.getProposition().getProperty("name",
-										c.getProposition().getId()),
-										pred,
-										"" + ((Label) node.getDenLabel()).getValue());
-					}
-				}
-			}
-			
-			done = true;
-			
-			return sol;
-		}
-		
-		@Override
-		public void remove()
-		{
-		}
-	}
+	//	class SolutionIterator implements Iterator<Solution> {
+	//		
+	//		boolean done = false;
+	//		
+	//		@Override
+	//		public boolean hasNext() {
+	//			return done == false;
+	//		}
+	//		
+	//		@Override
+	//		public Solution next() {
+	//			
+	//			Solution sol = new Solution();
+	//			
+	//			for (Proposition p : program.getModel().propositions()) {
+	//				Chunk c = kb.index().getChunk(p.getId());
+	//				
+	//				if (c != null) {
+	//					for (String pred : c.predicates()) {
+	//						Node node = c.getPredicate(pred);
+	//						sol.addValue(
+	//								c.getProposition().getProperty("name",
+	//										c.getProposition().getId()),
+	//										pred,
+	//										"" + ((Label) node.getSatLabel()).getValue());
+	//						sol.addValue(
+	//								"-" + c.getProposition().getProperty("name",
+	//										c.getProposition().getId()),
+	//										pred,
+	//										"" + ((Label) node.getDenLabel()).getValue());
+	//					}
+	//				}
+	//			}
+	//			
+	//			done = true;
+	//			
+	//			return sol;
+	//		}
+	//		
+	//		@Override
+	//		public void remove() {
+	//		}
+	//	}
 	
 	public double getPositiveValue( String id ) {
 		try {
@@ -325,7 +433,7 @@ public class RiskEvaluation implements Iterable<Solution>, Analysis
 			return new Evidence( node.getSatLabel().getValue(), node.getDenLabel().getValue() );
 		}
 		catch( Exception ex ) {
-//			ex.printStackTrace();
+			//			ex.printStackTrace();
 			return new Evidence( 0, 0 );
 		}
 	}
@@ -359,26 +467,22 @@ public class RiskEvaluation implements Iterable<Solution>, Analysis
 		}
 	}
 	
-	@Override
-	public Iterator<Solution> iterator() {
-		return new SolutionIterator();
-	}
-	
-	@Override
-	public Result getResult() {
-		return new Result()
-		{
-			@Override
-			public String getDescription()
-			{
-				return "";
-			}
-			
-			@Override
-			public Iterable<Solution> solutions()
-			{
-				return RiskEvaluation.this;
-			}
-		};
-	}
+	//	@Override
+	//	public Iterator<Solution> iterator() {
+	//		return new SolutionIterator();
+	//	}
+	//	
+	//	@Override
+	//	public Result getResult() {
+	//		return new Result() {
+	//			@Override
+	//			public String getDescription() {
+	//				return "";
+	//			}
+	//			@Override
+	//			public Iterable<Solution> solutions() {
+	//				return RiskEvaluation.this;
+	//			}
+	//		};
+	//	}
 }

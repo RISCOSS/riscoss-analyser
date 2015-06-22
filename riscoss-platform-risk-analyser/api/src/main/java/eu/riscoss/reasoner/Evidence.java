@@ -81,4 +81,23 @@ public class Evidence {
 	public double getSignal() {
 		return (1 + getDirection()) /2;
 	}
+
+	public static Evidence unpack(String value) {
+		if( value == null ) return new Evidence( 0, 0 );
+		String[] parts = value.split( "[;]" );
+		if( parts.length != 2 ) return new Evidence( 0, 0 );
+		try {
+			double p = Double.parseDouble( parts[0] );
+			double m = Double.parseDouble( parts[1] );
+			return new Evidence( p, m );
+		}
+		catch( Exception ex ) {
+			return new Evidence( 0, 0 );
+		}
+//		return null;
+	}
+	
+	public String pack() {
+		return this.p + ";" + this.m;
+	}
 }

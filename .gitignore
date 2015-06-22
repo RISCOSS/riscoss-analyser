@@ -1,6 +1,12 @@
+/target/
+classes
+tests
 target
 .project
 .classpath
 .settings
+/.classpath
 bin/
 lib/
+*.jar
+*.jnilib

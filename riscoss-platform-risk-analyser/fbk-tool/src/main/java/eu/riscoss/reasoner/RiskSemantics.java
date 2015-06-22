@@ -116,22 +116,6 @@ public class RiskSemantics extends Semantics {
 				new Rule( "sat", Rule.TYPE.DEN_DEN, 
 						new Condition( "sat", Operator.Equals ) ) );
 		
-//		rules.put( "meansEnd", 
-//				new Rule( "threatened", 
-//						new Condition( "threatened", Operator.Equals ) ) );
-//		rules.put( "means-end", 
-//				new Rule( "threatened", 
-//						new Condition( "threatened", Operator.Equals ) ) );
-//		rules.put( "contribution", 
-//				new Rule( "threatened", 
-//						new Condition( "threatened", Operator.Equals ) ) );
-//		rules.put( "depender", 
-//				new Rule( "threatened", 
-//						new Condition( "threatened", Operator.Equals ) ) );
-//		rules.put( "dependee", 
-//				new Rule( "threatened", 
-//						new Condition( "threatened", Operator.Equals ) ) );
-		
 		
 		putAxiom( "event", 
 				new Axiom( Axiom.TYPE.SAT_SAT, "threat", 
@@ -153,22 +137,6 @@ public class RiskSemantics extends Semantics {
 						new Condition( "not_possible", Operator.Equals ),
 						new Condition( "critical", Operator.Equals ) ) );
 		
-		
-//		putAxiom( "goal",
-//				new Axiom( "threatened",
-//						new Condition( "sf", Operator.Equals ) ) );
-//		putAxiom( "goal",
-//				new Axiom( "output",
-//						new Condition( "threatened", Operator.Equals ) ) );
-//		putAxiom( "goal",
-//				new Axiom( "output",
-//						new Condition( "threatened", Operator.Equals ) ) );
-//		putAxiom( "task",
-//				new Axiom( "threatened",
-//						new Condition( "sf", Operator.Equals ) ) );
-//		putAxiom( "task",
-//				new Axiom( "output",
-//						new Condition( "threatened", Operator.Equals ) ) );
 		
 		// Conversion between input st/sf to sat
 		putAxiom( "goal",
@@ -221,30 +189,57 @@ public class RiskSemantics extends Semantics {
 		putAxiom( "situation",
 				new Axiom( Axiom.TYPE.DEN_DEN, "output",
 						new Condition( "sat", Operator.Equals ) ) );
-		putAxiom( "goal",
-				new Axiom( Axiom.TYPE.SAT_DEN, "output",
-						new Condition( "sat", Operator.Equals ) ) );
-		putAxiom( "goal",
-				new Axiom( Axiom.TYPE.DEN_SAT, "output",
-						new Condition( "sat", Operator.Equals ) ) );
-		putAxiom( "softgoal",
-				new Axiom( Axiom.TYPE.SAT_DEN, "output",
-						new Condition( "sat", Operator.Equals ) ) );
-		putAxiom( "softgoal",
-				new Axiom( Axiom.TYPE.DEN_SAT, "output",
-						new Condition( "sat", Operator.Equals ) ) );
-		putAxiom( "task",
-				new Axiom( Axiom.TYPE.SAT_DEN, "output",
-						new Condition( "sat", Operator.Equals ) ) );
-		putAxiom( "task",
-				new Axiom( Axiom.TYPE.DEN_SAT, "output",
-						new Condition( "sat", Operator.Equals ) ) );
-		putAxiom( "resource",
-				new Axiom( Axiom.TYPE.SAT_DEN, "output",
-						new Condition( "sat", Operator.Equals ) ) );
-		putAxiom( "resource",
-				new Axiom( Axiom.TYPE.DEN_SAT, "output",
-						new Condition( "sat", Operator.Equals ) ) );
+		putAxiom( "indicator",
+				new Axiom( Axiom.TYPE.SAT_SAT, "output",
+						new Condition( "st", Operator.Equals ) ) );
+//		putAxiom( "goal",
+//				new Axiom( Axiom.TYPE.SAT_DEN, "output",
+//						new Condition( "sat", Operator.Equals ) ) );
+//		putAxiom( "goal",
+//				new Axiom( Axiom.TYPE.DEN_SAT, "output",
+//						new Condition( "sat", Operator.Equals ) ) );
+//		putAxiom( "softgoal",
+//				new Axiom( Axiom.TYPE.SAT_DEN, "output",
+//						new Condition( "sat", Operator.Equals ) ) );
+//		putAxiom( "softgoal",
+//				new Axiom( Axiom.TYPE.DEN_SAT, "output",
+//						new Condition( "sat", Operator.Equals ) ) );
+//		putAxiom( "task",
+//				new Axiom( Axiom.TYPE.SAT_DEN, "output",
+//						new Condition( "sat", Operator.Equals ) ) );
+//		putAxiom( "task",
+//				new Axiom( Axiom.TYPE.DEN_SAT, "output",
+//						new Condition( "sat", Operator.Equals ) ) );
+//		putAxiom( "resource",
+//				new Axiom( Axiom.TYPE.SAT_DEN, "output",
+//						new Condition( "sat", Operator.Equals ) ) );
+//		putAxiom( "resource",
+//				new Axiom( Axiom.TYPE.DEN_SAT, "output",
+//						new Condition( "sat", Operator.Equals ) ) );
 		
+		putAxiom( "goal",
+				new Axiom( Axiom.TYPE.SAT_SAT, "output",
+						new Condition( "sat", Operator.Equals ) ) );
+		putAxiom( "goal",
+				new Axiom( Axiom.TYPE.DEN_DEN, "output",
+						new Condition( "sat", Operator.Equals ) ) );
+		putAxiom( "softgoal",
+				new Axiom( Axiom.TYPE.SAT_SAT, "output",
+						new Condition( "sat", Operator.Equals ) ) );
+		putAxiom( "softgoal",
+				new Axiom( Axiom.TYPE.DEN_DEN, "output",
+						new Condition( "sat", Operator.Equals ) ) );
+		putAxiom( "task",
+				new Axiom( Axiom.TYPE.SAT_SAT, "output",
+						new Condition( "sat", Operator.Equals ) ) );
+		putAxiom( "task",
+				new Axiom( Axiom.TYPE.DEN_DEN, "output",
+						new Condition( "sat", Operator.Equals ) ) );
+		putAxiom( "resource",
+				new Axiom( Axiom.TYPE.SAT_SAT, "output",
+						new Condition( "sat", Operator.Equals ) ) );
+		putAxiom( "resource",
+				new Axiom( Axiom.TYPE.DEN_DEN, "output",
+						new Condition( "sat", Operator.Equals ) ) );
 	}
 }

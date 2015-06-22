@@ -17,56 +17,56 @@
 
 package eu.riscoss.fbk.lp;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import eu.riscoss.fbk.language.Proposition;
 
 
 public class LPKB
 {
 	ValueMap	index = new ValueMap();
-	Graph		graph = new Graph();
+	List<Node>	nodes = new ArrayList<Node>();
 	
 	public Node		TRUE = new Node( new Label( 1f ), new Label( 0f ) );
 	public Node		FALSE = new Node( new Label( 0f ), new Label( 1f ) );
 	
-	public LPKB()
-	{
-		graph.addNode( TRUE );
-		graph.addNode( FALSE );
+	public LPKB() {
+		nodes.add( TRUE );
+		nodes.add( FALSE );
 	}
 	
-	public Node store( Proposition p, String label )
-	{
+	public Node store( Proposition p, String label ) {
+		
 		Node node = null;
 		
-		if( index.getNode( p.getId(), label ) == null )
-		{
+		if( index.getNode( p.getId(), label ) == null ) {
 			node = index.store( p, label );
-			
-			graph.addNode( node );
+			nodes.add( node );
 		}
 		else
 			node = index.store( p, label );
 		
+		node.setName( p.getId() );
+		
 		return node;
 	}
 	
-	public void addRelation( eu.riscoss.fbk.lp.Relation rel )
-	{
-		graph.addRelation( rel );
+	public void addRelation( Edge rel ) {
+		// FIXME required?
+//		graph.addRelation( rel );
 	}
 	
-	public Node getNode( String id, String val )
-	{
+	public Node getNode( String id, String val ) {
 		return index.getNode( id, val );
-	}
-
-	public Graph getGraph()
-	{
-		return graph;
 	}
 	
 	public ValueMap index()
 	{
 		return index;
+	}
+
+	public List<Node> nodes() {
+		return nodes;
 	}
 }

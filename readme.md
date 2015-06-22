@@ -12,7 +12,7 @@ This is the risk analisys core of the RISCOSS project.
 ## Build
 
     mvn clean install
-    cp ./riscoss-remote-risk-analyser/target/riscoss-remote-risk-analyser-0.24-SNAPSHOT-jar-with-dependencies.jar ./analyser.jar
+    cp ./riscoss-remote-risk-analyser/target/riscoss-remote-risk-analyser-0.0.1-SNAPSHOT-jar-with-dependencies.jar ./analyser.jar
 
 ## Run
 

@@ -27,7 +27,7 @@ public class Label implements Comparable<Label>
 		else return false;
 	}
 
-	boolean isGreaterThan(Label aLabel) {
+	public boolean isGreaterThan(Label aLabel) {
 		if (this.compareTo(aLabel) == 1) // <this> is greater
 			return true;
 		else return false;

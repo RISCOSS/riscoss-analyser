@@ -321,7 +321,7 @@ public class KPARiskAnalysisTool implements RiskAnalysisEngine {
 				bn.readFile(tmpFilePath);
 			} catch(SMILEException se) {
 				//se.printStackTrace();
-				System.err.println("Unrecognizable model loaded, skipping. Error message: " + se.getMessage());
+//				System.err.println("Unrecognizable model loaded, skipping. Error message: " + se.getMessage());
 				return;
 			}
 			
@@ -552,6 +552,12 @@ public class KPARiskAnalysisTool implements RiskAnalysisEngine {
 		}
     	
     	return result;
+	}
+
+	@Override
+	public void resetFields() {
+		// TODO Auto-generated method stub
+		
 	}
 
 }
