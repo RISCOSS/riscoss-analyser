@@ -67,10 +67,10 @@ public class IStarMLImporter {
 						type = "proposition";
 					p = new Proposition( type, x.getAttr( "id", x.getAttr( "name" ) ) );
 					model.addProposition( p );
+//					System.out.println( "Adding " + p.getId() );
 				}
 				
 				if( p != null ) {
-					
 					for( String key : x.listAttributes() ) {
 						String value = x.getAttr( key );
 						if( "id".equals( value ) ) continue;
@@ -98,15 +98,26 @@ public class IStarMLImporter {
 				if( type == null )
 					type = "";
 				Relation r = new Relation( type );
-				r.setTarget( model.getProposition( xml.getAttr( "id", xml.getAttr( "name" ) ) ) );
+				r.setTarget( model.getProposition( xml.getAttr( "id", xml.getAttr( "iref", xml.getAttr( "name" ) ) ) ) );
 				if( x.getAttr( "operator", null ) != null ) {
 					r.setOperator( x.getAttr( "operator", "and" ) );
 				}
 				
 				for( XmlNode child : x.getChildren( "ielement" ) ) {
-//					if( model.getProposition( child.getAttr( "id", child.getAttr( "iref", child.getAttr( "name", null ) ) ) ) == null )
-//							System.out.println();
 					r.addSource( model.getProposition( child.getAttr( "id", child.getAttr( "iref", child.getAttr( "name" ) ) ) ) );
+				}
+				if( r.getSourceCount() < 1 ) {
+					Proposition p = model.getProposition( xml.getAttr( "iref", "" ) );
+					if( p != null ) {
+						r.addSource( p );
+					}
+				}
+				
+				if( r.getTarget() == null ) {
+					continue;
+				}
+				if( r.getSourceCount() < 1 ) {
+					continue;
 				}
 				
 				model.addRelation( r );
