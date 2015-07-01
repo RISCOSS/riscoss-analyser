@@ -17,8 +17,9 @@
 
 package eu.riscoss.fbk.lp;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
 
 import eu.riscoss.fbk.language.Proposition;
 
@@ -26,7 +27,7 @@ import eu.riscoss.fbk.language.Proposition;
 public class LPKB
 {
 	ValueMap	index = new ValueMap();
-	List<Node>	nodes = new ArrayList<Node>();
+	Set<Node>	nodes = new HashSet<Node>();
 	
 	public Node		TRUE = new Node( new Label( 1f ), new Label( 0f ) );
 	public Node		FALSE = new Node( new Label( 0f ), new Label( 1f ) );
@@ -66,7 +67,7 @@ public class LPKB
 		return index;
 	}
 
-	public List<Node> nodes() {
+	public Collection<Node> nodes() {
 		return nodes;
 	}
 }

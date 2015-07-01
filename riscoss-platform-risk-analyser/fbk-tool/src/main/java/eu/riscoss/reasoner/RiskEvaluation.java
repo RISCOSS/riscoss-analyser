@@ -110,6 +110,14 @@ public class RiskEvaluation
 				for( Edge edge : node.in() ) {
 					
 					if( edge.getCode() != null ) {
+						
+//						if( "GOAL-MinimiseOSSInvolvement".equals( edge.getTarget().getName() ) ) {
+//							if( edge.getSources().size() < 2 ) {
+//								System.out.print("");
+//							}
+//							System.out.print( getSourceValues( edge ) );
+//						}
+						
 						try {
 							Evidence e = null; //new Evidence( 0, 0 );
 							JsExtension.get().put( "nodes", edge.getSources() );
@@ -128,10 +136,6 @@ public class RiskEvaluation
 									
 									if( edge.getTarget().getSatisfaction() != edge.getTarget().getUserObject().floatValue() ) {
 										
-//										System.out.println( 
-//												edge.getTarget().getSatisfaction() + " != " +
-//												edge.getTarget().getUserObject().floatValue() );
-										
 										edge.getTarget().setSatLabel( new Label( edge.getTarget().getUserObject().floatValue(), false ) );
 										
 										graphChanged = true;
@@ -142,6 +146,10 @@ public class RiskEvaluation
 							
 							Label sat = new Label( (float)e.getPositive() * edge.getWeight() );
 							Label den = new Label( (float)e.getNegative() * edge.getWeight() );
+							
+//							if( "GOAL-MinimiseOSSInvolvement".equals( edge.getTarget().getName() ) ) {
+//								System.out.println( " -> [" + edge.getTarget().getSatisfaction() + ";" + edge.getTarget().getDenial() + "]" );
+//							}
 							
 							if( sat.isGreaterThan( edge.getTarget().getSatLabel() ) ) {
 								edge.getTarget().setSatLabel( sat );
@@ -158,8 +166,20 @@ public class RiskEvaluation
 						}
 					}
 					else {
+						
+//						if( "GOAL-MinimiseOSSInvolvement".equals( edge.getTarget().getName() ) ) {
+//							if( edge.getSources().size() < 2 ) {
+//								System.out.print("");
+//							}
+//							System.out.print( getSourceValues( edge ) );
+//						}
+						
 						Label sat = edge.solveForS();
 						Label den = edge.solveForD();
+						
+//						if( "GOAL-MinimiseOSSInvolvement".equals( edge.getTarget().getName() ) ) {
+//							System.out.println( " -> [" + edge.getTarget().getSatisfaction() + ";" + edge.getTarget().getDenial() + "]" );
+//						}
 						
 						if( sat.isGreaterThan( edge.getTarget().getSatLabel() ) ) {
 							graphChanged = true;
@@ -177,6 +197,15 @@ public class RiskEvaluation
 		while (graphChanged == true);
 	}
 	
+//	private String getSourceValues( Edge edge ) {
+//		
+//		String s = "";
+//		for( Node node : edge.getSources() ) {
+//			s += "[" + node.getSatisfaction() + ";" + node.getDenial() + "],";
+//		}
+//		return s;
+//	}
+
 	List<Evidence> getEvidenceList( Collection<Node> nodes ) {
 		List<Evidence> list = new ArrayList<>();
 		for( Node node : nodes ) {

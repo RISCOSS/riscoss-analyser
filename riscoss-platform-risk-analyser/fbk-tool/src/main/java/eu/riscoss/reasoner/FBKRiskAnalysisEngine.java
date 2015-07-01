@@ -187,7 +187,7 @@ public class FBKRiskAnalysisEngine implements RiskAnalysisEngine
 		analysis = new RiskEvaluation();
 		
 		analysis.setProgram( program );
-		analysis.initCode();
+//		analysis.initCode();
 		
 		program.getScenario().setConstraint( "always", "st", "1.0" );
 		

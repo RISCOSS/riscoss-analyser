@@ -82,6 +82,25 @@ public class Node {
 	}
 	
 	public void setSatLabel(Label aLabel) {
+		
+//		if( aLabel.getValue() == satLabel.getValue() ) return;
+		
+//		if( "Act-ACQ-Tech".equals( getName() ) ) {
+//			if( aLabel.getValue() > 0 ) {
+//				if( satLabel.getValue() == 0 ) {
+//					System.out.println( "Triggering value of " + getName() + " to " + aLabel.getValue() );
+//				}
+//				else {
+////					System.out.println( "Setting value of " + getName() + " to " + aLabel.getValue() );
+//				}
+//			}
+//			else {
+//				if( satLabel.getValue() > 0 ) {
+//					System.out.println( "Resetting value of " + getName() + " to " + aLabel.getValue() );
+//				}				
+//			}
+//		}
+			
 		checkLabelConsistency(aLabel,getSatLabel());
 		// stores the current label in the old label field
 		oldSatLabel = satLabel;
@@ -159,6 +178,10 @@ public class Node {
 	
 	public String getName() {
 		return this.name;
+	}
+	
+	public String toString() {
+		return getName() + " (" + super.toString() + ")";
 	}
 	
 }

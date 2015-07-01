@@ -218,28 +218,28 @@ public class RiskSemantics extends Semantics {
 //						new Condition( "sat", Operator.Equals ) ) );
 		
 		putAxiom( "goal",
-				new Axiom( Axiom.TYPE.SAT_SAT, "output",
+				new Axiom( Axiom.TYPE.DEN_SAT, "output",
 						new Condition( "sat", Operator.Equals ) ) );
 		putAxiom( "goal",
-				new Axiom( Axiom.TYPE.DEN_DEN, "output",
+				new Axiom( Axiom.TYPE.SAT_DEN, "output",
 						new Condition( "sat", Operator.Equals ) ) );
 		putAxiom( "softgoal",
-				new Axiom( Axiom.TYPE.SAT_SAT, "output",
+				new Axiom( Axiom.TYPE.DEN_SAT, "output",
 						new Condition( "sat", Operator.Equals ) ) );
 		putAxiom( "softgoal",
-				new Axiom( Axiom.TYPE.DEN_DEN, "output",
+				new Axiom( Axiom.TYPE.SAT_DEN, "output",
 						new Condition( "sat", Operator.Equals ) ) );
 		putAxiom( "task",
-				new Axiom( Axiom.TYPE.SAT_SAT, "output",
+				new Axiom( Axiom.TYPE.DEN_SAT, "output",
 						new Condition( "sat", Operator.Equals ) ) );
 		putAxiom( "task",
-				new Axiom( Axiom.TYPE.DEN_DEN, "output",
+				new Axiom( Axiom.TYPE.SAT_DEN, "output",
 						new Condition( "sat", Operator.Equals ) ) );
 		putAxiom( "resource",
-				new Axiom( Axiom.TYPE.SAT_SAT, "output",
+				new Axiom( Axiom.TYPE.DEN_SAT, "output",
 						new Condition( "sat", Operator.Equals ) ) );
 		putAxiom( "resource",
-				new Axiom( Axiom.TYPE.DEN_DEN, "output",
+				new Axiom( Axiom.TYPE.SAT_DEN, "output",
 						new Condition( "sat", Operator.Equals ) ) );
 	}
 }
