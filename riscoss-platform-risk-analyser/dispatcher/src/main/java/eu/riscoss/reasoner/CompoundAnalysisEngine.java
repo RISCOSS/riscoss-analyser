@@ -57,10 +57,14 @@ public class CompoundAnalysisEngine implements RiskAnalysisEngine {
 				}
 			}
 		} catch (ClassNotFoundException e) {
+		} catch( NoClassDefFoundError e ) {
 		} catch (InstantiationException e) {
 			e.printStackTrace();
 		} catch (IllegalAccessException e) {
 			e.printStackTrace();
+		}
+		catch( Exception ex ) {
+			ex.printStackTrace();
 		}
 		catch( Throwable t ) {
 			t.printStackTrace();

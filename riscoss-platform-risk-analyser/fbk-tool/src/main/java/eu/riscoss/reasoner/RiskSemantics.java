@@ -28,218 +28,201 @@ public class RiskSemantics extends Semantics {
 	
 	public RiskSemantics() {
 		
-		rules.put( "expose", 
+		addCluster( "Indicators" );
+		addCluster( "Evidences" );
+		
+		addRule( "expose", "Evidences", 
 				new Rule( "possible", Rule.TYPE.SAT_SAT,
 						new Condition( "sat", Operator.Equals ) ) );
-		rules.put( "expose", 
+		addRule( "expose", "Evidences", 
 				new Rule( "possible", Rule.TYPE.DEN_DEN,
 						new Condition( "sat", Operator.Equals ) ) );
 		
-		rules.put( "expose", 
+		addRule( "expose", "Evidences", 
 				new Rule( "possible", Rule.TYPE.SAT_SAT,
 						new Condition( "threat", Operator.Equals ) ) );
-		rules.put( "expose", 
+		addRule( "expose", "Evidences", 
 				new Rule( "possible", Rule.TYPE.DEN_DEN,
 						new Condition( "threat", Operator.Equals ) ) );
 		
-		rules.put( "protect", 
+		addRule( "protect", "Evidences", 
 				new Rule( "possible", Rule.TYPE.SAT_DEN,
 						new Condition( "sat", Operator.Equals ) ) );
-		rules.put( "protect", 
+		addRule( "protect", "Evidences", 
 				new Rule( "possible", Rule.TYPE.DEN_SAT,
 						new Condition( "sat", Operator.Equals ) ) );
 		
-		rules.put( "increase", 
+		addRule( "increase", "Evidences", 
 				new Rule( "critical", Rule.TYPE.SAT_SAT,
 						new Condition( "sat", Operator.Equals ) ) );
 		
-		rules.put( "reduce", 
+		addRule( "reduce", "Evidences", 
 				new Rule( "critical", Rule.TYPE.SAT_DEN,
 						new Condition( "sat", Operator.Equals ) ) );
 		
-		rules.put( "indicate", 
+		addRule( "indicate", "Indicators", 
 				new Rule( "st", 
 						new Condition( "st", Operator.Equals ) ) );
-		rules.put( "impact", 
+//		addRule( "indicate", 
+//				new Rule( "sat", 
+//						new Condition( "st", Operator.Equals ) ) );
+		addRule( "impact", "Evidences", 
 				new Rule( "sat", Rule.TYPE.SAT_DEN,
 						new Condition( "threat", Operator.Equals ) ) );
-		rules.put( "impact", 
+		addRule( "impact", "Evidences", 
 				new Rule( "sat", Rule.TYPE.DEN_SAT,
 						new Condition( "threat", Operator.Equals ) ) );
-		rules.put( "satisfy", 
+		addRule( "satisfy", "Evidences", 
 				new Rule( "sat", Rule.TYPE.SAT_SAT, 
 						new Condition( "sat", Operator.Equals ) ) );
-		rules.put( "satisfy", 
+		addRule( "satisfy", "Evidences", 
 				new Rule( "sat", Rule.TYPE.DEN_DEN, 
 						new Condition( "sat", Operator.Equals ) ) );
-		rules.put( "break", 
+		addRule( "break", "Evidences", 
 				new Rule( "sat", Rule.TYPE.SAT_DEN, 
 						new Condition( "sat", Operator.Equals ) ) );
-		rules.put( "break", 
+		addRule( "break", "Evidences", 
 				new Rule( "sat", Rule.TYPE.DEN_SAT, 
 						new Condition( "sat", Operator.Equals ) ) );
 		
-		rules.put( "decomposition", 
+		addRule( "decomposition", "Evidences", 
 				new Rule( "sat", Rule.TYPE.SAT_SAT, 
 						new Condition( "sat", Operator.Equals ) ) );
-		rules.put( "decomposition", 
+		addRule( "decomposition", "Evidences", 
 				new Rule( "sat", Rule.TYPE.DEN_DEN, 
 						new Condition( "sat", Operator.Equals ) ) );
-		rules.put( "meansEnd", 
+		addRule( "meansEnd", "Evidences", 
 				new Rule( "sat", Rule.TYPE.SAT_SAT, 
 						new Condition( "sat", Operator.Equals ) ) );
-		rules.put( "meansEnd", 
+		addRule( "meansEnd", "Evidences", 
 				new Rule( "sat", Rule.TYPE.DEN_DEN, 
 						new Condition( "sat", Operator.Equals ) ) );
-		rules.put( "means-end", 
+		addRule( "means-end", "Evidences", 
 				new Rule( "sat", Rule.TYPE.SAT_SAT, 
 						new Condition( "sat", Operator.Equals ) ) );
-		rules.put( "means-end", 
+		addRule( "means-end", "Evidences", 
 				new Rule( "sat", Rule.TYPE.DEN_DEN, 
 						new Condition( "sat", Operator.Equals ) ) );
-		rules.put( "contribution", 
+		addRule( "contribution", "Evidences", 
 				new Rule( "sat", Rule.TYPE.SAT_SAT, 
 						new Condition( "sat", Operator.Equals ) ) );
-		rules.put( "contribution", 
+		addRule( "contribution", "Evidences", 
 				new Rule( "sat", Rule.TYPE.DEN_DEN, 
 						new Condition( "sat", Operator.Equals ) ) );
-		rules.put( "depender", 
+		addRule( "depender", "Evidences", 
 				new Rule( "sat", Rule.TYPE.SAT_SAT, 
 						new Condition( "sat", Operator.Equals ) ) );
-		rules.put( "depender", 
+		addRule( "depender", "Evidences", 
 				new Rule( "sat", Rule.TYPE.DEN_DEN, 
 						new Condition( "sat", Operator.Equals ) ) );
-		rules.put( "dependee", 
+		addRule( "dependee", "Evidences", 
 				new Rule( "sat", Rule.TYPE.SAT_SAT, 
 						new Condition( "sat", Operator.Equals ) ) );
-		rules.put( "dependee", 
+		addRule( "dependee", "Evidences", 
 				new Rule( "sat", Rule.TYPE.DEN_DEN, 
 						new Condition( "sat", Operator.Equals ) ) );
 		
 		
-		putAxiom( "event", 
+		putAxiom( "event",  "Evidences", 
 				new Axiom( Axiom.TYPE.SAT_SAT, "threat", 
 						new Condition( "possible", Operator.Equals ),
 						new Condition( "critical", Operator.Equals ) ) );
-		putAxiom( "event", 
+		putAxiom( "event", "Evidences", 
 				new Axiom( Axiom.TYPE.SAT_DEN, "threat",
 						new Condition( "possible", Operator.Equals ),
 						new Condition( "not_critical", Operator.Equals ) ) );
-		putAxiom( "event", 
+		putAxiom( "event", "Evidences", 
 				new Axiom( Axiom.TYPE.DEN_SAT, "not_critical",
 						new Condition( "critical", Operator.Equals ) ) );
 		
-		putAxiom( "event", 
+		putAxiom( "event",  "Evidences", 
 				new Axiom( Axiom.TYPE.DEN_SAT, "not_possible",
 						new Condition( "possible", Operator.Equals ) ) );
-		putAxiom( "event", 
+		putAxiom( "event",  "Evidences", 
 				new Axiom( Axiom.TYPE.SAT_DEN, "threat",
 						new Condition( "not_possible", Operator.Equals ),
 						new Condition( "critical", Operator.Equals ) ) );
 		
 		
 		// Conversion between input st/sf to sat
-		putAxiom( "goal",
+		putAxiom( "goal", "Evidences", 
 				new Axiom( Axiom.TYPE.SAT_SAT, "sat",
 						new Condition( "st", Operator.Equals ) ) );
-		putAxiom( "goal",
+		putAxiom( "goal", "Evidences", 
 				new Axiom( Axiom.TYPE.SAT_DEN, "sat",
 						new Condition( "sf", Operator.Equals ) ) );
-		putAxiom( "task",
+		putAxiom( "task", "Evidences", 
 				new Axiom( Axiom.TYPE.SAT_SAT, "sat",
 						new Condition( "st", Operator.Equals ) ) );
-		putAxiom( "task",
+		putAxiom( "task", "Evidences", 
 				new Axiom( Axiom.TYPE.SAT_DEN, "sat",
 						new Condition( "sf", Operator.Equals ) ) );
-		putAxiom( "softgoal",
+		putAxiom( "softgoal", "Evidences", 
 				new Axiom( Axiom.TYPE.SAT_SAT, "sat",
 						new Condition( "st", Operator.Equals ) ) );
-		putAxiom( "softgoal",
+		putAxiom( "softgoal", "Evidences", 
 				new Axiom( Axiom.TYPE.SAT_DEN, "sat",
 						new Condition( "sf", Operator.Equals ) ) );
-		putAxiom( "resource",
+		putAxiom( "resource", "Evidences", 
 				new Axiom( Axiom.TYPE.SAT_SAT, "sat",
 						new Condition( "st", Operator.Equals ) ) );
-		putAxiom( "resource",
+		putAxiom( "resource", "Evidences", 
 				new Axiom( Axiom.TYPE.SAT_DEN, "sat",
 						new Condition( "sf", Operator.Equals ) ) );
-		putAxiom( "situation",
+		putAxiom( "situation", "Evidences", 
 				new Axiom( Axiom.TYPE.SAT_SAT, "sat",
 						new Condition( "st", Operator.Equals ) ) );
-		putAxiom( "situation",
+		putAxiom( "situation", "Evidences", 
 				new Axiom( Axiom.TYPE.SAT_DEN, "sat",
 						new Condition( "sf", Operator.Equals ) ) );
-		putAxiom( "proposition",
+		putAxiom( "proposition", "Evidences", 
 				new Axiom( Axiom.TYPE.SAT_SAT, "sat",
 						new Condition( "st", Operator.Equals ) ) );
-		putAxiom( "proposition",
+		putAxiom( "proposition", "Evidences", 
 				new Axiom( Axiom.TYPE.SAT_DEN, "sat",
 						new Condition( "sf", Operator.Equals ) ) );
 		
 		// predicates to be reported as output
-		putAxiom( "event",
+		putAxiom( "event", "Evidences", 
 				new Axiom( Axiom.TYPE.SAT_SAT, "output",
 						new Condition( "threat", Operator.Equals ) ) );
-		putAxiom( "event",
+		putAxiom( "event", "Evidences", 
 				new Axiom( Axiom.TYPE.DEN_DEN, "output",
 						new Condition( "threat", Operator.Equals ) ) );
-		putAxiom( "situation",
+		putAxiom( "situation", "Evidences", 
 				new Axiom( Axiom.TYPE.SAT_SAT, "output",
 						new Condition( "sat", Operator.Equals ) ) );
-		putAxiom( "situation",
+		putAxiom( "situation", "Evidences", 
 				new Axiom( Axiom.TYPE.DEN_DEN, "output",
 						new Condition( "sat", Operator.Equals ) ) );
-		putAxiom( "indicator",
+		putAxiom( "indicator", "Indicators", 
 				new Axiom( Axiom.TYPE.SAT_SAT, "output",
 						new Condition( "st", Operator.Equals ) ) );
-//		putAxiom( "goal",
-//				new Axiom( Axiom.TYPE.SAT_DEN, "output",
-//						new Condition( "sat", Operator.Equals ) ) );
-//		putAxiom( "goal",
-//				new Axiom( Axiom.TYPE.DEN_SAT, "output",
-//						new Condition( "sat", Operator.Equals ) ) );
-//		putAxiom( "softgoal",
-//				new Axiom( Axiom.TYPE.SAT_DEN, "output",
-//						new Condition( "sat", Operator.Equals ) ) );
-//		putAxiom( "softgoal",
-//				new Axiom( Axiom.TYPE.DEN_SAT, "output",
-//						new Condition( "sat", Operator.Equals ) ) );
-//		putAxiom( "task",
-//				new Axiom( Axiom.TYPE.SAT_DEN, "output",
-//						new Condition( "sat", Operator.Equals ) ) );
-//		putAxiom( "task",
-//				new Axiom( Axiom.TYPE.DEN_SAT, "output",
-//						new Condition( "sat", Operator.Equals ) ) );
-//		putAxiom( "resource",
-//				new Axiom( Axiom.TYPE.SAT_DEN, "output",
-//						new Condition( "sat", Operator.Equals ) ) );
-//		putAxiom( "resource",
-//				new Axiom( Axiom.TYPE.DEN_SAT, "output",
-//						new Condition( "sat", Operator.Equals ) ) );
 		
-		putAxiom( "goal",
+		putAxiom( "goal", "Evidences", 
 				new Axiom( Axiom.TYPE.DEN_SAT, "output",
 						new Condition( "sat", Operator.Equals ) ) );
-		putAxiom( "goal",
+		putAxiom( "goal", "Evidences", 
 				new Axiom( Axiom.TYPE.SAT_DEN, "output",
 						new Condition( "sat", Operator.Equals ) ) );
-		putAxiom( "softgoal",
+		putAxiom( "softgoal", "Evidences", 
 				new Axiom( Axiom.TYPE.DEN_SAT, "output",
 						new Condition( "sat", Operator.Equals ) ) );
-		putAxiom( "softgoal",
+		putAxiom( "softgoal", "Evidences", 
 				new Axiom( Axiom.TYPE.SAT_DEN, "output",
 						new Condition( "sat", Operator.Equals ) ) );
-		putAxiom( "task",
+		putAxiom( "task", "Evidences", 
 				new Axiom( Axiom.TYPE.DEN_SAT, "output",
 						new Condition( "sat", Operator.Equals ) ) );
-		putAxiom( "task",
+		putAxiom( "task", "Evidences", 
 				new Axiom( Axiom.TYPE.SAT_DEN, "output",
 						new Condition( "sat", Operator.Equals ) ) );
-		putAxiom( "resource",
+		putAxiom( "resource", "Evidences", 
 				new Axiom( Axiom.TYPE.DEN_SAT, "output",
 						new Condition( "sat", Operator.Equals ) ) );
-		putAxiom( "resource",
+		putAxiom( "resource", "Evidences", 
 				new Axiom( Axiom.TYPE.SAT_DEN, "output",
 						new Condition( "sat", Operator.Equals ) ) );
+		
 	}
 }

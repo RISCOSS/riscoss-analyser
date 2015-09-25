@@ -25,8 +25,12 @@ import eu.riscoss.fbk.util.MultiMap;
 public class Semantics {
 	static final ArrayList<Axiom>	emptyAxiomList	= new ArrayList<Axiom>();
 	
+	private ArrayList<String> clusters = new ArrayList<>();
+	
 	private MultiMap<String, Axiom>	axioms			= new MultiMap<String, Axiom>();
+	
 	public MultiMap<String, Rule>	rules			= new MultiMap<String, Rule>();
+
 	
 	public Iterable<Axiom> axioms(String type) {
 		if (axioms.get(type) == null)
@@ -35,13 +39,15 @@ public class Semantics {
 		return axioms.getList(type);
 	}
 	
-	public void putAxiom(String type, Axiom axiom) {
+	public void putAxiom(String type, String clusterName, Axiom axiom ) {
 		axiom.mnemonic = type;
 		axioms.put(type, axiom);
+		axiom.setCluster( clusterName );
 	}
 	
-	public void addRule( String type, Rule rule ) {
+	public void addRule( String type, String clusterName, Rule rule ) {
 		rules.put( type, rule );
+		rule.setCluster( clusterName );
 	}
 	
 	public int getAxiomCount() {
@@ -54,5 +60,13 @@ public class Semantics {
 	
 	public List<Rule> rules( String type ) {
 		return rules.list( type );
+	}
+	
+	public void addCluster( String clusterName ) {
+		this.clusters.add( clusterName );
+	}
+	
+	public List<String> clusters() {
+		return clusters;
 	}
 }

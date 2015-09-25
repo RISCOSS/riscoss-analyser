@@ -138,6 +138,11 @@ public class Proposition {
 		properties.put( name, value );
 	}
 	
+	public Proposition withProperty( String name, String value ) {
+		properties.put( name, value );
+		return this;
+	}
+	
 	public void removeProperty( String name ) {
 		properties.remove( name );
 	}

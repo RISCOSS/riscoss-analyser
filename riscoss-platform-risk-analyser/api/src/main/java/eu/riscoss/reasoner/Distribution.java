@@ -42,22 +42,24 @@ public class Distribution {
 	
 	public String toString() {
 		
-		String printDist = "[ ";
-		int size = values.size();
-		if(size == 0)
-			return "[ ]";
-		if(size == 1)
-			return "[ " + values.get(0) + " ]";
-		Double[] dblArr = new Double[size];
-		values.toArray(dblArr);
-		for (int i = 0; i < size; i++) {
-			printDist += dblArr[i];
-			if(i < (size - 1)) {
-				printDist += ", ";
-			}
-		}
-		printDist += " ]";
-		return printDist;
+		return pack();
+		
+//		String printDist = "[ ";
+//		int size = values.size();
+//		if(size == 0)
+//			return "[ ]";
+//		if(size == 1)
+//			return "[ " + values.get(0) + " ]";
+//		Double[] dblArr = new Double[size];
+//		values.toArray(dblArr);
+//		for (int i = 0; i < size; i++) {
+//			printDist += dblArr[i];
+//			if(i < (size - 1)) {
+//				printDist += ", ";
+//			}
+//		}
+//		printDist += " ]";
+//		return printDist;
 	}
 	
 	public String pack() {

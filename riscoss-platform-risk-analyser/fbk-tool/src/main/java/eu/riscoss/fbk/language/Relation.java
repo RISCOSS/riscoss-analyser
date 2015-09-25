@@ -326,4 +326,19 @@ public class Relation implements Cloneable
 			}
 		}
 	}
+
+	public Relation withTarget(Proposition proposition) {
+		setTarget( proposition );
+		return this;
+	}
+	
+	public Relation withSource( Proposition p ) {
+		addSource( p );
+		return this;
+	}
+	
+	public Relation withProperty( String key, String value ) {
+		setProperty( key, value );
+		return this;
+	}
 }

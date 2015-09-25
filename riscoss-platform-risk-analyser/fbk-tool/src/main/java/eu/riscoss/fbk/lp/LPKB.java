@@ -17,8 +17,12 @@
 
 package eu.riscoss.fbk.lp;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import eu.riscoss.fbk.language.Proposition;
@@ -28,6 +32,9 @@ public class LPKB
 {
 	ValueMap	index = new ValueMap();
 	Set<Node>	nodes = new HashSet<Node>();
+	List<String> layers = new ArrayList<>();
+	
+	Map<String,ArrayList<Edge>> edges = new HashMap<String,ArrayList<Edge>>();
 	
 	public Node		TRUE = new Node( new Label( 1f ), new Label( 0f ) );
 	public Node		FALSE = new Node( new Label( 0f ), new Label( 1f ) );
@@ -53,9 +60,17 @@ public class LPKB
 		return node;
 	}
 	
-	public void addRelation( Edge rel ) {
-		// FIXME required?
-//		graph.addRelation( rel );
+	public void addLayer( String name ) {
+		layers.add( name );
+		edges.put( name, new ArrayList<Edge>() );
+	}
+	
+	public void addRelation( Edge rel, String clusterName ) {
+		ArrayList<Edge> cluster = edges.get( clusterName );
+		if( cluster == null ) {
+			throw new RuntimeException( "Undefined layer: " + clusterName );
+		}
+		cluster.add( rel );
 	}
 	
 	public Node getNode( String id, String val ) {
@@ -69,5 +84,15 @@ public class LPKB
 
 	public Collection<Node> nodes() {
 		return nodes;
+	}
+
+	public List<Edge> edges( String layerName ) {
+		ArrayList<Edge> layer = edges.get( layerName );
+		if( layer == null ) return new ArrayList<Edge>();
+		return layer;
+	}
+	
+	public Collection<String> layers() {
+		return layers;
 	}
 }

@@ -41,7 +41,6 @@ public class Label implements Comparable<Label>
 	
 	
     private final float myValue;      // for easy comparisons between labels
-//    private final String myName;    // name of the label, for its displaying
 
     // static objects ...
     static final Label NO      = new Label(0.0f);

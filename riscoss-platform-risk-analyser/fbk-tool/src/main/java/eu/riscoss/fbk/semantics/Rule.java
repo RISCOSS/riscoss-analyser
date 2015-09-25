@@ -31,29 +31,22 @@ public class Rule
 	
 	
 	TYPE type = TYPE.SAT_SAT;
-//	public double fx = 1;
 	
 	public Condition condition = new Condition( "", Operator.Equals );
-	
-//	public int connective = All;
+
+
+	private String clusterName;
 	
 	
 	public Rule( String target, Condition condition )
 	{
-//		this.connective = connective;
 		this.targetPred = target;
 		this.condition = condition;
 	}
 	
-//	public Rule( String target, Condition condition )
-//	{
-//		this( All, target, condition );
-//	}
-	
 	public Rule( String target, TYPE type, Condition condition )
 	{
 		this( target, condition );
-//		this.fx = fx;
 		this.type = type;
 	}
 	
@@ -67,5 +60,14 @@ public class Rule
 
 	public TYPE getPropagationType() {
 		return this.type;
+	}
+
+
+	public void setCluster(String clusterName) {
+		this.clusterName = clusterName;
+	}
+	
+	public String getCluster() {
+		return this.clusterName;
 	}
 }

@@ -30,7 +30,7 @@ public class Node {
 	private LinkedList<Edge> in;  // list of  rels. where this node is parent
 	private LinkedList<Edge> out;   // list of rels. where this node is child
 	
-	private double object = Double.NaN;
+	private double object = 0.0; //Double.NaN;
 	private String name;
 	
 	
@@ -82,25 +82,6 @@ public class Node {
 	}
 	
 	public void setSatLabel(Label aLabel) {
-		
-//		if( aLabel.getValue() == satLabel.getValue() ) return;
-		
-//		if( "Act-ACQ-Tech".equals( getName() ) ) {
-//			if( aLabel.getValue() > 0 ) {
-//				if( satLabel.getValue() == 0 ) {
-//					System.out.println( "Triggering value of " + getName() + " to " + aLabel.getValue() );
-//				}
-//				else {
-////					System.out.println( "Setting value of " + getName() + " to " + aLabel.getValue() );
-//				}
-//			}
-//			else {
-//				if( satLabel.getValue() > 0 ) {
-//					System.out.println( "Resetting value of " + getName() + " to " + aLabel.getValue() );
-//				}				
-//			}
-//		}
-			
 		checkLabelConsistency(aLabel,getSatLabel());
 		// stores the current label in the old label field
 		oldSatLabel = satLabel;
@@ -167,7 +148,17 @@ public class Node {
 		this.object = object;
 	}
 	
+	public void setValue( double value ) {
+		if( Double.isNaN(value) )
+			return;
+		this.object = value;
+	}
+	
 	public Double getUserObject() {
+		return this.object;
+	}
+	
+	public Double getValue() {
 		return this.object;
 	}
 

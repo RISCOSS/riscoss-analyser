@@ -92,7 +92,7 @@ public class RiskEvaluation
 		codeLoaded = false;
 	}
 	
-	public void propagate( LPKB kb ) {
+	public void propagate1( LPKB kb ) {
 		
 		boolean graphChanged;
 		
@@ -111,10 +111,10 @@ public class RiskEvaluation
 					
 					if( edge.getCode() != null ) {
 						
-//						if( "GOAL-MinimiseOSSInvolvement".equals( edge.getTarget().getName() ) ) {
-//							if( edge.getSources().size() < 2 ) {
-//								System.out.print("");
-//							}
+//						if( edge.getTarget().getName().endsWith( ":bsd4" ) ) {
+////							if( edge.getSources().size() < 2 ) {
+////								System.out.print("");
+////							}
 //							System.out.print( getSourceValues( edge ) );
 //						}
 						
@@ -140,6 +140,10 @@ public class RiskEvaluation
 										
 										graphChanged = true;
 									}
+//									if( edge.getTarget().getName().endsWith( ":bsd4" ) ) {
+//										System.out.println( " -> " + edge.getTarget().getName() + "[" + edge.getTarget().getSatisfaction() + ";" + edge.getTarget().getDenial() + "]" );
+//									}
+									
 								}
 								continue;
 							}
@@ -147,8 +151,8 @@ public class RiskEvaluation
 							Label sat = new Label( (float)e.getPositive() * edge.getWeight() );
 							Label den = new Label( (float)e.getNegative() * edge.getWeight() );
 							
-//							if( "GOAL-MinimiseOSSInvolvement".equals( edge.getTarget().getName() ) ) {
-//								System.out.println( " -> [" + edge.getTarget().getSatisfaction() + ";" + edge.getTarget().getDenial() + "]" );
+//							if( edge.getTarget().getName().endsWith( ":bsd4" ) ) {
+//								System.out.println( " -> " + edge.getTarget().getName() + "[" + edge.getTarget().getSatisfaction() + ";" + edge.getTarget().getDenial() + "]" );
 //							}
 							
 							if( sat.isGreaterThan( edge.getTarget().getSatLabel() ) ) {
@@ -167,7 +171,7 @@ public class RiskEvaluation
 					}
 					else {
 						
-//						if( "GOAL-MinimiseOSSInvolvement".equals( edge.getTarget().getName() ) ) {
+//						if( edge.getTarget().getName().endsWith( ":bsd4" ) ) {
 //							if( edge.getSources().size() < 2 ) {
 //								System.out.print("");
 //							}
@@ -177,8 +181,8 @@ public class RiskEvaluation
 						Label sat = edge.solveForS();
 						Label den = edge.solveForD();
 						
-//						if( "GOAL-MinimiseOSSInvolvement".equals( edge.getTarget().getName() ) ) {
-//							System.out.println( " -> [" + edge.getTarget().getSatisfaction() + ";" + edge.getTarget().getDenial() + "]" );
+//						if( edge.getTarget().getName().endsWith( ":bsd4" ) ) {
+//							System.out.println( " -> " + edge.getTarget().getName() + "[" + edge.getTarget().getSatisfaction() + ";" + edge.getTarget().getDenial() + "]" );
 //						}
 						
 						if( sat.isGreaterThan( edge.getTarget().getSatLabel() ) ) {
@@ -197,11 +201,120 @@ public class RiskEvaluation
 		while (graphChanged == true);
 	}
 	
+	public void propagate( LPKB kb ) {
+		
+		for( String layer : kb.layers() ) {
+			
+		boolean graphChanged;
+		
+		do {
+			for( Node node : kb.nodes() ) {
+				node.syncLabels();
+			}
+			
+			graphChanged = false;
+			
+//			for( Node node : kb.nodes() ) {
+				
+				for( Edge edge : kb.edges( layer ) ) {
+					
+					if( edge.getCode() != null ) {
+						
+//						if( edge.getTarget().getName().endsWith( ":bsd4" ) ) {
+////							if( edge.getSources().size() < 2 ) {
+////								System.out.print("");
+////							}
+//							System.out.print( getSourceValues( edge ) );
+//						}
+						
+						try {
+							Evidence e = null; //new Evidence( 0, 0 );
+							JsExtension.get().put( "nodes", edge.getSources() );
+							JsExtension.get().put( "target", edge.getTarget() );
+							JsExtension.get().put( "relation", edge );
+							JsExtension.get().put( "sources", getEvidenceList( edge.getSources() ) );
+							String code = "e=" + edge.getCode();
+							try {
+								e = (Evidence)JsExtension.get().eval( code );
+							}
+							catch( ClassCastException ex ) {}
+							
+							if( e == null ) {
+								
+								if( !Double.isNaN( edge.getTarget().getUserObject() ) ) {
+									
+									if( edge.getTarget().getSatisfaction() != edge.getTarget().getUserObject().floatValue() ) {
+										
+										edge.getTarget().setSatLabel( new Label( edge.getTarget().getUserObject().floatValue(), false ) );
+										
+										graphChanged = true;
+									}
+//									if( edge.getTarget().getName().endsWith( ":bsd4" ) ) {
+//										System.out.println( " -> " + edge.getTarget().getName() + "[" + edge.getTarget().getSatisfaction() + ";" + edge.getTarget().getDenial() + "]" );
+//									}
+									
+								}
+								continue;
+							}
+							
+							Label sat = new Label( (float)e.getPositive() * edge.getWeight() );
+							Label den = new Label( (float)e.getNegative() * edge.getWeight() );
+							
+//							if( edge.getTarget().getName().endsWith( ":bsd4" ) ) {
+//								System.out.println( " -> " + edge.getTarget().getName() + "[" + edge.getTarget().getSatisfaction() + ";" + edge.getTarget().getDenial() + "]" );
+//							}
+							
+							if( sat.isGreaterThan( edge.getTarget().getSatLabel() ) ) {
+								edge.getTarget().setSatLabel( sat );
+								graphChanged = true;
+							}
+							if( den.isGreaterThan( edge.getTarget().getDenLabel() ) ) {
+								edge.getTarget().setDenLabel( den );
+								graphChanged = true;
+							}
+							
+						}
+						catch (Exception ex) {
+							ex.printStackTrace();
+						}
+					}
+					else {
+						
+//						if( edge.getTarget().getName().endsWith( ":bsd4" ) ) {
+//							if( edge.getSources().size() < 2 ) {
+//								System.out.print("");
+//							}
+//							System.out.print( getSourceValues( edge ) );
+//						}
+						
+						Label sat = edge.solveForS();
+						Label den = edge.solveForD();
+						
+//						if( edge.getTarget().getName().endsWith( ":bsd4" ) ) {
+//							System.out.println( " -> " + edge.getTarget().getName() + "[" + edge.getTarget().getSatisfaction() + ";" + edge.getTarget().getDenial() + "]" );
+//						}
+						
+						if( sat.isGreaterThan( edge.getTarget().getSatLabel() ) ) {
+							graphChanged = true;
+							edge.getTarget().setSatLabel( sat );
+						}
+						if( den.isGreaterThan( edge.getTarget().getDenLabel() ) ) {
+							graphChanged = true;
+							edge.getTarget().setDenLabel( den );
+						}
+					}
+				}
+			
+		}
+		while (graphChanged == true);
+		}
+	}
+	
 //	private String getSourceValues( Edge edge ) {
 //		
 //		String s = "";
 //		for( Node node : edge.getSources() ) {
-//			s += "[" + node.getSatisfaction() + ";" + node.getDenial() + "],";
+//			s += node.getName() + "[" + node.getSatisfaction() + ";" + node.getDenial() + "],";
 //		}
 //		return s;
 //	}
@@ -216,6 +329,10 @@ public class RiskEvaluation
 	
 	LPKB mkgraph() {
 		LPKB kb = new LPKB();
+		
+		for( String clusterName : semantics.clusters() ) {
+			kb.addLayer( clusterName );
+		}
 		
 		for (String type : program.getModel().propositionTypes()) {
 			for (Proposition p : program.getModel().propositions(type)) {
@@ -249,14 +366,14 @@ public class RiskEvaluation
 						r_comb.setWeight( 1 );
 						
 						r_comb.setMnemonic(
-								p.getId() + " -> " + a.getPropagationType().toString() + a.p_then );
+								p.getId() + " --" + a.getPropagationType().toString() + "--> " + a.p_then );
 						
 						for (Condition cond : a.conditions()) {
 							Node source = kb.store(p, cond.getPredicate());
 							r_comb.addSourceNode(source);
 						}
 						
-						kb.addRelation(r_comb);
+						kb.addRelation( r_comb, a.getCluster() );
 						
 						r_comb.informNodes();
 					}
@@ -348,7 +465,7 @@ public class RiskEvaluation
 						rel.addSourceNode(source);
 					}
 					
-					kb.addRelation(rel);
+					kb.addRelation( rel, rule.getCluster() );
 					
 					rel.informNodes();
 				}
@@ -486,6 +603,8 @@ public class RiskEvaluation
 			Chunk c = kb.index().getChunk(p.getId());
 			Node node = c.getPredicate(predicate );
 			if( node == null ) return null;
+//			if( "low-affinity".equals( id ) )
+//				System.out.println( node.hashCode() + " - " + predicate );
 			return new Evidence(
 					((Label) node.getSatLabel()).getValue(), 
 					((Label) node.getDenLabel()).getValue() );

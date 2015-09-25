@@ -196,7 +196,9 @@ public class FBKRiskAnalysisEngine implements RiskAnalysisEngine
 			if( p.getProperty( "default-value", null ) != null ) {
 				try {
 					double d = Double.parseDouble( p.getProperty( "default-value", null ) );
-					program.getScenario().setConstraint( p.getId(), "st", "" + d );
+					if( program.getScenario().getConstraint( p.getId(), "st" ) == null ) {
+						program.getScenario().setConstraint( p.getId(), "st", "" + d );
+					}
 				}
 				catch( Exception ex ) {
 					ex.printStackTrace();

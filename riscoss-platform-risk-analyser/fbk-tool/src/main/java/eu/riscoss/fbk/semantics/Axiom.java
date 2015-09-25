@@ -36,6 +36,7 @@ public class Axiom
 //	public int fx = 1;
 	TYPE type = TYPE.SAT_SAT;
 	public String mnemonic = "" + this.hashCode();
+	private String clusterName;
 	
 	public Axiom( String p_then, String ... p_if )
 	{
@@ -104,5 +105,13 @@ public class Axiom
 	public Iterable<Condition> conditions()
 	{
 		return conditions;
+	}
+
+	public void setCluster(String clusterName) {
+		this.clusterName = clusterName;
+	}
+	
+	public String getCluster() {
+		return this.clusterName;
 	}
 }
