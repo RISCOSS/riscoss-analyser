@@ -17,6 +17,7 @@
 
 package eu.riscoss.reasoner;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -63,6 +64,10 @@ public class FBKRiskAnalysisEngine implements RiskAnalysisEngine
 		loader.load( xmlModel, program );
 	}
 	
+	public void loadModel( File file ) {
+		loader.load( file, program );
+	}
+	
 	public RiskEvaluation getEngine() {
 		return analysis;
 	}
@@ -106,7 +111,8 @@ public class FBKRiskAnalysisEngine implements RiskAnalysisEngine
 //				if( p.getStereotype().equals( "goal" ) == false )
 //					if( p.getStereotype().equals( "task" ) == false )
 //						if( p.getProperty( "output", "false" ).equalsIgnoreCase( "false" ) ) continue;
-				if( "true".equalsIgnoreCase( p.getProperty( "output", "false" ) ) ) {
+				if( isOutput( p ) ) {
+//				if( "true".equalsIgnoreCase( p.getProperty( "output", "false" ) ) ) {
 					Chunk chunk = new Chunk( p.getId(), p.getStereotype() );
 					list.add( chunk );
 				}
@@ -633,5 +639,9 @@ public class FBKRiskAnalysisEngine implements RiskAnalysisEngine
 	@Override
 	public void resetFields() {
 		program.getScenario().clear();
+	}
+
+	public boolean isOutput( Proposition p ) {
+		return "true".equalsIgnoreCase( p.getProperty( "output", "false" ) );
 	}
 }

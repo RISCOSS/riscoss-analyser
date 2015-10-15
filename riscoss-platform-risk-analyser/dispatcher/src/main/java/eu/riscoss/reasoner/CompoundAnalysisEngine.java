@@ -18,6 +18,7 @@
 package eu.riscoss.reasoner;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -86,6 +87,10 @@ public class CompoundAnalysisEngine implements RiskAnalysisEngine {
 		}
 		
 		last = engine;
+	}
+	
+	public Collection<RiskAnalysisEngine> listEngines() {
+		return this.engines.values();
 	}
 	
 	@Override
