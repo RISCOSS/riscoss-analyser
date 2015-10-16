@@ -224,8 +224,6 @@ public class RiskEvaluation
 				
 				for( Edge edge : kb.edges( layer ) ) {
 					
-//					System.out.println( edge + " " + edge.getTarget().getSatisfaction() );
-					
 					if( edge.getCode() != null ) {
 						
 						try {
@@ -254,16 +252,10 @@ public class RiskEvaluation
 								continue;
 							}
 							
-//							if( Double.isNaN( edge.getTarget().getSatisfaction() ) ) {
-//								System.out.println( edge + " >>> NaN" );
-//								continue;
-//							}
-							
 							Label sat = new Label( (float)e.getPositive() * edge.getWeight() );
 							Label den = new Label( (float)e.getNegative() * edge.getWeight() );
 							
 							if( sat.isGreaterThan( edge.getTarget().getSatLabel() ) ) {
-								System.out.println( edge + " >>> " + sat );
 								edge.getTarget().setSatLabel( sat );
 								graphChanged = true;
 							}
@@ -296,8 +288,6 @@ public class RiskEvaluation
 						}
 					}
 				}
-				
-				System.out.print( "" );
 				
 			}
 			while (graphChanged == true);
