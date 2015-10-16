@@ -224,6 +224,8 @@ public class RiskEvaluation
 				
 				for( Edge edge : kb.edges( layer ) ) {
 					
+//					System.out.println( edge + " " + edge.getTarget().getSatisfaction() );
+					
 					if( edge.getCode() != null ) {
 						
 						try {
@@ -252,10 +254,16 @@ public class RiskEvaluation
 								continue;
 							}
 							
+//							if( Double.isNaN( edge.getTarget().getSatisfaction() ) ) {
+//								System.out.println( edge + " >>> NaN" );
+//								continue;
+//							}
+							
 							Label sat = new Label( (float)e.getPositive() * edge.getWeight() );
 							Label den = new Label( (float)e.getNegative() * edge.getWeight() );
 							
 							if( sat.isGreaterThan( edge.getTarget().getSatLabel() ) ) {
+								System.out.println( edge + " >>> " + sat );
 								edge.getTarget().setSatLabel( sat );
 								graphChanged = true;
 							}
@@ -274,16 +282,22 @@ public class RiskEvaluation
 						Label sat = edge.solveForS();
 						Label den = edge.solveForD();
 						
-						if( sat.isGreaterThan( edge.getTarget().getSatLabel() ) ) {
-							edge.getTarget().setSatLabel( sat );
-							graphChanged = true;
+						if( !Double.isNaN( sat.getValue() ) ) {
+							if( sat.isGreaterThan( edge.getTarget().getSatLabel() ) ) {
+								edge.getTarget().setSatLabel( sat );
+								graphChanged = true;
+							}
 						}
-						if( den.isGreaterThan( edge.getTarget().getDenLabel() ) ) {
-							edge.getTarget().setDenLabel( den );
-							graphChanged = true;
+						if( !Double.isNaN( den.getValue() ) ) {
+							if( den.isGreaterThan( edge.getTarget().getDenLabel() ) ) {
+								edge.getTarget().setDenLabel( den );
+								graphChanged = true;
+							}
 						}
 					}
 				}
+				
+				System.out.print( "" );
 				
 			}
 			while (graphChanged == true);
