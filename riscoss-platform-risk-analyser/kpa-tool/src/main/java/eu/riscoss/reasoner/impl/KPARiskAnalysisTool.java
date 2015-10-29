@@ -483,15 +483,17 @@ public class KPARiskAnalysisTool implements RiskAnalysisEngine {
 			
 			Network riskBn = null;
 	    	for (Network bn : this.networkMap.values()) {
-	    		for(int hNode : bn.getAllNodes()) {
-	    			// check if all input nodes are set first
-	    			if(NODE_TYPE_PROP_VALUE_INPUT.equals(getUserPropertyValue(bn.getNodeUserProperties(hNode), NODE_TYPE_PROP_NAME))) {
-		    			String val = getUserPropertyValue(bn.getNodeUserProperties(hNode), NODE_SET_PROP_NAME);
-		    			if(!NODE_SET_PROP_VAL.equals(val)) {
-		    				throw new ReasonerException("Not all input nodes have been set");
-		    			}
-	    			}
-	    		}
+	    		// Uncommenting these lines, the BN assumes NO default value can be used 
+	    		// and if some value is missing, an exception is thrown
+//	    		for(int hNode : bn.getAllNodes()) {
+//	    			// check if all input nodes are set first
+//	    			if(NODE_TYPE_PROP_VALUE_INPUT.equals(getUserPropertyValue(bn.getNodeUserProperties(hNode), NODE_TYPE_PROP_NAME))) {
+//		    			String val = getUserPropertyValue(bn.getNodeUserProperties(hNode), NODE_SET_PROP_NAME);
+//		    			if(!NODE_SET_PROP_VAL.equals(val)) {
+//		    				throw new ReasonerException("Not all input nodes have been set");
+//		    			}
+//	    			}
+//	    		}
 				String bnPropVal = getUserPropertyValue(bn.getUserProperties(), BN_TYPE_PROP_NAME);
 				if(BN_TYPE_PROP_VALUE_INDICATOR.equals(bnPropVal)) {
 					// update beliefs for all indicator networks
@@ -545,6 +547,7 @@ public class KPARiskAnalysisTool implements RiskAnalysisEngine {
 	    	}
 		}
 		catch(Exception ex) {
+			ex.printStackTrace();
 			// TODO this seems like a very stupid way of throwing and catching exceptions...
 			// I guess it will be more clear after API is defined in more detail what to do.
 			this.lastMessage = ex.getMessage();
