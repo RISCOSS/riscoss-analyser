@@ -547,7 +547,6 @@ public class KPARiskAnalysisTool implements RiskAnalysisEngine {
 	    	}
 		}
 		catch(Exception ex) {
-			ex.printStackTrace();
 			// TODO this seems like a very stupid way of throwing and catching exceptions...
 			// I guess it will be more clear after API is defined in more detail what to do.
 			this.lastMessage = ex.getMessage();

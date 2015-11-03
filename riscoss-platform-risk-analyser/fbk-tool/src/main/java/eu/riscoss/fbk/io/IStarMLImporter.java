@@ -104,7 +104,12 @@ public class IStarMLImporter {
 				}
 				
 				for( XmlNode child : x.getChildren( "ielement" ) ) {
-					r.addSource( model.getProposition( child.getAttr( "id", child.getAttr( "iref", child.getAttr( "name" ) ) ) ) );
+					try {
+						r.addSource( model.getProposition( child.getAttr( "id", child.getAttr( "iref", child.getAttr( "name" ) ) ) ) );
+					}
+					catch( NullPointerException ex ) {
+						System.err.println( "Unknown node: id='" + child.getAttr( "id" ) + "', iref='" + child.getAttr( "iref" ) + "', name='" + child.getAttr( "name" ) + "'" );
+					}
 				}
 				if( r.getSourceCount() < 1 ) {
 					Proposition p = model.getProposition( xml.getAttr( "iref", "" ) );
