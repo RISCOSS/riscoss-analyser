@@ -218,9 +218,11 @@ public class RemoteRiskAnalyser
             Map<String, Object> item = new HashMap<String, Object>();
             Field descriptionField = riskAnalysisEngine.getField(chunk, FieldType.DESCRIPTION);
             if (descriptionField != null) {
-                item.put("description", riskAnalysisEngine.getField(chunk, FieldType.DESCRIPTION).getValue());
-            } else {
-                item.put("description", chunk.getId());
+                item.put("description", descriptionField.getValue());
+            }
+            Field labelField = riskAnalysisEngine.getField(chunk, FieldType.LABEL);
+            if (labelField != null) {
+                item.put("label", labelField.getValue());
             }
             item.put("type", field.getDataType().toString());
             item.put("value", field.getValue());
@@ -276,6 +278,10 @@ public class RemoteRiskAnalyser
             o.put("type", dataType);
             if (rae.getField(chunk, FieldType.DESCRIPTION) != null) {
                 o.put("description", rae.getField(chunk, FieldType.DESCRIPTION).getValue());
+            }
+            Field labelField = rae.getField(chunk, FieldType.LABEL);
+            if (labelField != null) {
+                o.put("label", labelField.getValue());
             }
             if (rae.getField(chunk, FieldType.QUESTION) != null) {
                 o.put("question", rae.getField(chunk, FieldType.QUESTION).getValue());
@@ -334,7 +340,7 @@ if (engine == null) { throw new RuntimeException(); }
                 out.put("warnings", new JSONArray(warnings));
                 Map<String, Map<String, Object>> m = runAnalysis(engine);
                 // use net.sf.json for this particular field to preserve backward compat behavior.
-                out.put("result", new JSONObject(m)); 
+                out.put("result", new JSONObject(m));
             }
         }
     }
@@ -386,7 +392,7 @@ if (engine == null) { throw new RuntimeException(); }
             if ("-".equals(inputFile)) {
                 request.put("inputs", getInputs(IOUtils.toString(System.in, "UTF-8")));
             } else {
-                
+
                 request.put("inputs",
                     getInputs(FileUtils.readFileToString(new File(inputFile), "UTF-8")));
             }
