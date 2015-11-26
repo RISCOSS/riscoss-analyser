@@ -124,6 +124,12 @@ public class RiskSemantics extends Semantics {
 		
 		
 		putAxiom( "event",  "Evidences", 
+				new Axiom( Axiom.TYPE.SAT_SAT, "possible", 
+						new Condition( "st", Operator.Equals ) ) );
+		putAxiom( "event",  "Evidences", 
+				new Axiom( Axiom.TYPE.DEN_SAT, "not_possible",
+						new Condition( "sf", Operator.Equals ) ) );
+		putAxiom( "event",  "Evidences", 
 				new Axiom( Axiom.TYPE.SAT_SAT, "threat", 
 						new Condition( "possible", Operator.Equals ),
 						new Condition( "critical", Operator.Equals ) ) );

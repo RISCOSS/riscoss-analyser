@@ -40,7 +40,7 @@ public class XmlWriter {
 		
 		if( !"".equals( program.getOptions().getValue( "code", "" ) ) ) {
 			XmlNode xcode = xml.add( "script" );
-			xcode.setValue( program.getOptions().getValue( "code", "" ) );
+			xcode.setValue( "\n" + program.getOptions().getValue( "code", "" ) + "\n" );
 			xcode.setAttr( "$cdata", "true" );
 		}
 		
