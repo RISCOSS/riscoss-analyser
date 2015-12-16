@@ -53,28 +53,27 @@ public class XmlLoader
 					
 					p = new Proposition( entity.getTag(), entity.getAttr( "id" ) );
 					
-					for( String key : entity.listAttributes() ) {
-						
-						if( key.compareTo( "id" ) == 0 ) continue;
-						
-						if( key.compareTo( "istarmlId" ) == 0 ) continue;
-						
-						p.setProperty( key, entity.getAttr( key ) );
-					}
-					
-					for( XmlNode prop : entity.getChildren( "property" ) ) {
-						
-						String key = prop.getAttr( "name", null );
-						
-						if( key == null ) continue;
-						
-						if( key.equalsIgnoreCase( "id" ) ) continue;
-						if( key.equalsIgnoreCase( "istarmlId" ) ) continue;
-						
-						p.setProperty( key, prop.getAttr( "value", "" ) );
-					}
-					
 					model.addProposition( p );
+				}
+				
+				for( String key : entity.listAttributes() ) {
+					
+					if( key.compareTo( "id" ) == 0 ) continue;
+					if( key.compareTo( "istarmlId" ) == 0 ) continue;
+					
+					p.setProperty( key, entity.getAttr( key ) );
+				}
+				
+				for( XmlNode prop : entity.getChildren( "property" ) ) {
+					
+					String key = prop.getAttr( "name", null );
+					
+					if( key == null ) continue;
+					
+					if( key.equalsIgnoreCase( "id" ) ) continue;
+					if( key.equalsIgnoreCase( "istarmlId" ) ) continue;
+					
+					p.setProperty( key, prop.getAttr( "value", "" ) );
 				}
 			}
 		}
