@@ -131,7 +131,7 @@ public class RiscossLoader {
 			}
 		}
 		
-		for (Relation r : sourceModel.relations()) {
+		for (Relation r : additionModel.relations()) {
 			try {
 				Relation newr = r.clone();
 				
